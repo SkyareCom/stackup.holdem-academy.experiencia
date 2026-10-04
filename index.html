@@ -583,6 +583,15 @@ button{appearance:none;border:none;outline:none;background:none;}
 .plan-head,.app-head{align-items:flex-start!important}
 .plan-grid,.apps-grid{align-items:start!important}
 </style>
+<style id="text-spacing-audit-fix">
+/* Normaliza renderização e espaçamento legível do conteúdo textual. */
+.ref-card b,.ref-card small,.plan-name,.plan-price,.plan-desc,.plan-meta,
+.app-name,.app-price,.app-desc,.profile-box,.lesson p,.lesson span,.lesson b{
+  word-spacing:normal!important;
+  letter-spacing:normal;
+}
+.plan-desc,.app-desc,.plan-meta{overflow-wrap:break-word!important;word-break:normal!important}
+</style>
 </head>
 <body>
 <main class="app">
