@@ -60,6 +60,24 @@ button{appearance:none;border:none;outline:none;background:none;}
   .title,.subtitle{font-size:11px;}
 }
 </style>
+
+<style id="experience-internal-shell">
+.internal-shell{position:absolute;inset:0;z-index:40;display:none;overflow:hidden;color:var(--text)}
+.internal-shell.active{display:block}
+.internal-bg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat}
+.internal-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(1,8,4,.12) 18%,rgba(1,8,4,.14) 52%,rgba(0,0,0,.30))}
+.internal-ambient{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 57%,rgba(39,255,117,.10),transparent 30%),radial-gradient(ellipse at 50% 77%,rgba(39,255,117,.05),transparent 24%);pointer-events:none}
+.internal-page{position:absolute;inset:0 0 66px;z-index:2;display:none;padding:14px 16px 18px;overflow:hidden}
+.internal-page.active{display:block}
+.internal-head{display:flex;align-items:center;gap:10px}
+.internal-logo{width:50px;height:50px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.34))}
+.internal-title{display:inline-flex;align-items:center;min-height:34px;padding:7px 14px;border:1px solid var(--line2);border-radius:18px;background:rgba(8,20,13,.34);font:700 12px/1 'Saira',sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#f2efe8}
+.internal-content{height:calc(100% - 64px)}
+.internal-nav{position:absolute;left:0;right:0;bottom:0;z-index:3;height:66px;padding:0 8px max(4px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);align-items:center;background:rgba(2,8,5,.86);border-top:1px solid rgba(97,255,152,.15);backdrop-filter:blur(10px)}
+.internal-nav button{height:52px;padding:0 2px;color:rgba(247,247,241,.58);font:600 10px/1 'Saira',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.internal-nav button.active{color:#f7f7f1}
+.internal-nav button.active::after{content:"";display:block;width:22px;height:2px;margin:7px auto 0;border-radius:2px;background:#2adc62;box-shadow:0 0 8px rgba(42,220,98,.45)}
+</style>
 </head>
 <body>
 <main class="app">
@@ -96,6 +114,18 @@ button{appearance:none;border:none;outline:none;background:none;}
       </button>
     </section>
   </div>
+  
+<section id="internal-shell" class="internal-shell" aria-label="Academy">
+  <div class="internal-bg"></div><div class="internal-overlay"></div><div class="internal-ambient"></div>
+  <section class="internal-page active" data-page="home"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">HOME</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="base"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">BASE</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="modalidades"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">MODALIDADES</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="pratica"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PRÁTICA</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="perfil"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PERFIL</div></header><div class="internal-content"></div></section>
+  <nav class="internal-nav" aria-label="Navegação principal">
+    <button class="active" data-page-target="home">HOME</button><button data-page-target="base">BASE</button><button data-page-target="modalidades">MODALIDADES</button><button data-page-target="pratica">PRÁTICA</button><button data-page-target="perfil">PERFIL</button>
+  </nav>
+</section>
   <div id="toast" aria-live="polite"></div>
   <section id="biometric-screen">
     <div class="bio-card">
@@ -129,6 +159,10 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
   document.getElementById('bio-enter').addEventListener('click',()=>{bioScreen.style.display='none';showToast(translations[lang].success);});
 })();
+</script>
+
+<script id="experience-internal-navigation">
+(()=>{const shell=document.getElementById('internal-shell');const open=()=>{shell.classList.add('active');document.querySelectorAll('.internal-bg').forEach(el=>el.style.backgroundImage='url('+window.ACADEMY_BG+')');document.querySelectorAll('.internal-logo').forEach(el=>el.src=window.ACADEMY_LOGO)};document.querySelectorAll('[data-page-target]').forEach(btn=>btn.addEventListener('click',()=>{const p=btn.dataset.pageTarget;document.querySelectorAll('.internal-page').forEach(el=>el.classList.toggle('active',el.dataset.page===p));document.querySelectorAll('[data-page-target]').forEach(el=>el.classList.toggle('active',el===btn))}));document.getElementById('bio-enter').addEventListener('click',()=>setTimeout(open,0));window.openAcademyHome=open})();
 </script>
 </body>
 <!-- re-uploaded approved front -->
