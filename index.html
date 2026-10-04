@@ -186,8 +186,9 @@ button{appearance:none;border:none;outline:none;background:none;}
 .internal-head{display:grid!important;grid-template-columns:50px minmax(0,1fr)!important;gap:10px!important;align-items:center!important}
 .internal-title{display:none!important}
 .internal-content{position:relative!important}
-.internal-content>.page-actions{position:absolute!important;top:-58px!important;left:60px!important;right:0!important;height:50px!important;margin:0!important;z-index:8!important;display:grid!important;align-items:center!important}
-.internal-content>.page-actions .page-action{height:38px!important;min-height:38px!important;margin:0!important}
+.header-actions{min-width:0;width:100%;height:50px;display:flex;align-items:center}
+.header-actions .page-actions{width:100%!important;height:50px!important;margin:0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;align-items:center!important}
+.header-actions .page-action{height:38px!important;min-height:38px!important;margin:0!important;padding:0 8px!important}
 .content-section-title{display:flex!important;align-items:center!important;min-height:34px!important;margin:0 0 10px!important;padding:0 2px!important;color:#f7f7f1!important;font:600 12px/1.15 'Saira Semi Condensed',sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase!important}
 </style>
 <style id="academy-live-content">
@@ -335,11 +336,11 @@ button{appearance:none;border:none;outline:none;background:none;}
   
 <section id="internal-shell" class="internal-shell" aria-label="Academy">
   <div class="internal-bg"></div><div class="internal-overlay"></div><div class="internal-ambient"></div>
-  <section class="internal-page active" data-page="home"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">HOME</div></header><div class="internal-content"></div></section>
-  <section class="internal-page" data-page="base"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">BASE</div></header><div class="internal-content"></div></section>
-  <section class="internal-page" data-page="modalidades"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">MODALIDADES</div></header><div class="internal-content"></div></section>
-  <section class="internal-page" data-page="pratica"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PRÁTICA</div></header><div class="internal-content"></div></section>
-  <section class="internal-page" data-page="perfil"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PERFIL</div></header><div class="internal-content"></div></section>
+  <section class="internal-page active" data-page="home"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="header-actions"></div><div class="internal-title">HOME</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="base"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="header-actions"></div><div class="internal-title">BASE</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="modalidades"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="header-actions"></div><div class="internal-title">MODALIDADES</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="pratica"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="header-actions"></div><div class="internal-title">PRÁTICA</div></header><div class="internal-content"></div></section>
+  <section class="internal-page" data-page="perfil"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="header-actions"></div><div class="internal-title">PERFIL</div></header><div class="internal-content"></div></section>
   <nav class="internal-nav" aria-label="Navegação principal">
     <button class="active" data-page-target="home"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M9.5 20v-6h5v6"/></svg><span>HOME</span></button><button data-page-target="base"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg><span>BASE</span></button><button data-page-target="modalidades"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="16" rx="2"/><path d="m8 8 2-2 2 2-2 2z"/><path d="M19 7v12a2 2 0 0 1-2 2H8"/></svg><span>MODALIDADES</span></button><button data-page-target="pratica"><svg viewBox="0 0 24 24"><path d="M12 3v4"/><path d="M5.6 5.6 8.4 8.4"/><path d="M3 12h4"/><circle cx="13" cy="13" r="6"/><path d="m10.5 13 1.7 1.7 3.3-3.4"/></svg><span>PRÁTICA</span></button><button data-page-target="perfil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><span>PERFIL</span></button>
   </nav>
@@ -396,9 +397,13 @@ const home=[['base',{pt:'BASE',en:'BASE',es:'BASE'},{pt:'Fundamentos essenciais 
 const icon=n=>n&&String(n.ic||'').startsWith('m_')?C:n&&String(n.ic||'').startsWith('p_')?T:I;
 const card=(id,title,desc,ic=I)=>'<button class="ref-card" data-ref="'+esc(id)+'"><span class="ref-icon">'+ic+'</span><b>'+esc(title)+'</b><small>'+esc(desc)+'</small></button>';
 function navMarkup(k,inner=false){
- if(k==='home'&&!inner)return '<div class="page-actions"><button class="page-action" data-exit>'+ui('SAIR DO APP','EXIT APP','SALIR DE LA APP')+'</button><button class="page-action" data-section-next>'+ui('PRÓXIMA SEÇÃO','NEXT SECTION','SIGUIENTE SECCIÓN')+'</button></div>';
- if(!inner)return '<div class="page-actions"><button class="page-action" data-section-prev>‹ '+ui('VOLTAR','BACK','VOLVER')+'</button><button class="page-action" data-home>⌂ HOME</button></div>';
- return '<div class="page-actions"><button class="page-action" data-root-back>‹ '+ui('VOLTAR','BACK','VOLVER')+'</button><button class="page-action" data-home>⌂ HOME</button></div>'
+ const page=document.querySelector('.internal-page[data-page="'+k+'"]'),h=page?.querySelector('.header-actions');
+ let html='';
+ if(k==='home'&&!inner)html='<div class="page-actions"><button class="page-action" data-exit>'+ui('SAIR DO APP','EXIT APP','SALIR DE LA APP')+'</button><button class="page-action" data-section-next>'+ui('PRÓXIMA SEÇÃO','NEXT SECTION','SIGUIENTE SECCIÓN')+'</button></div>';
+ else if(!inner)html='<div class="page-actions"><button class="page-action" data-section-prev>‹ '+ui('VOLTAR','BACK','VOLVER')+'</button><button class="page-action" data-home>⌂ HOME</button></div>';
+ else html='<div class="page-actions"><button class="page-action" data-root-back>‹ '+ui('VOLTAR','BACK','VOLVER')+'</button><button class="page-action" data-home>⌂ HOME</button></div>';
+ if(h)h.innerHTML=html;
+ return ''
 }
 function setTitle(k,t){const page=document.querySelector('.internal-page[data-page="'+k+'"]'),label=t||k.toUpperCase();if(!page)return;const x=page.querySelector('.internal-title');if(x){x.textContent='';x.setAttribute('aria-hidden','true')}const c=page.querySelector('.internal-content');if(!c)return;let h=c.querySelector('.content-section-title');if(!h){h=document.createElement('div');h.className='content-section-title';const a=c.querySelector('.page-actions');if(a)a.insertAdjacentElement('afterend',h);else c.prepend(h)}h.textContent=label}
 function list(k,nodes,title){const c=el(k);if(!c)return;c.innerHTML=navMarkup(k)+'<div class="ref-grid">'+nodes.map(n=>card(n.id,tx(n.t),tx(n.d),icon(n))).join('')+'</div>';setTitle(k,title||k.toUpperCase())}
