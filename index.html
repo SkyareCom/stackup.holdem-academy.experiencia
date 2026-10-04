@@ -180,6 +180,21 @@ button{appearance:none;border:none;outline:none;background:none;}
 .ref-card b{font-weight:600!important;grid-column:2!important;grid-row:1!important;width:100%!important;height:28px!important;display:flex!important;align-items:end!important;justify-content:flex-start!important;text-align:left!important}
 .ref-card small{grid-column:2!important;grid-row:2!important;width:100%!important;height:32px!important;display:flex!important;align-items:start!important;justify-content:flex-start!important;text-align:left!important}
 </style>
+<style id="single-line-card-descriptions">
+/* Regra global: descrições dos cards sempre em uma única linha. */
+.ref-card small,
+.plan-desc,
+.app-desc{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+</style>
 <style id="top-page-navigation">
 .page-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin:0 0 10px}.page-action,.profile-exit{min-height:38px;border:1px solid rgba(97,255,152,.15);border-radius:14px;background:rgba(7,17,12,.62);color:#f7f7f1;font:400 12px/1 'Saira Semi Condensed',sans-serif;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:7px}.page-action svg,.profile-exit svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.profile-exit{width:100%;margin:0 0 18px}
 </style>
