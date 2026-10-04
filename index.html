@@ -79,6 +79,25 @@ button{appearance:none;border:none;outline:none;background:none;}
 .internal-nav button.active{color:#2adc62}
 .internal-nav button.active::after{display:none!important}
 </style>
+<style id="global-layout-fix">
+.internal-page{inset:0 0 calc(72px + env(safe-area-inset-bottom))!important;padding:14px 16px 0!important;overflow:hidden!important}
+.internal-head{height:58px!important;min-height:58px!important;position:relative!important;z-index:2!important}
+.internal-content{height:calc(100% - 58px)!important;padding-top:10px!important;padding-bottom:26px!important;overflow-y:auto!important;overscroll-behavior:contain!important;scroll-padding-top:10px!important;scroll-padding-bottom:28px!important}
+.internal-nav{height:calc(66px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom)!important}
+.content-view,.ref-grid{padding-bottom:32px!important}
+.lesson{gap:10px!important;padding-bottom:28px!important}
+.lesson>*,.lesson .lc,.lesson .rrow,.lesson .qcard{margin:0!important}
+.lesson .lg{display:grid!important;gap:10px!important;padding:0!important;border:0!important;background:transparent!important}
+.lesson .cg{display:grid!important;gap:7px!important;padding:0!important;border:0!important;background:transparent!important}
+.lesson .ch{display:grid!important;grid-template-columns:minmax(92px,auto) 1fr!important;gap:10px!important;align-items:baseline!important;padding:7px 0!important;border:0!important;border-bottom:1px solid rgba(97,255,152,.10)!important;background:transparent!important}
+.lesson .ch:last-child{border-bottom:0!important}
+.lesson .ch strong,.lesson .ch span{display:block!important;margin:0!important}
+.lesson h3{margin:0 0 8px!important}
+.lesson p{margin:0!important}
+.lesson p+p{margin-top:8px!important}
+.page-actions{margin-bottom:12px!important}
+.ref-grid{gap:9px!important}
+</style>
 <style id="approved-internal-type">
 @import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600&display=swap');
 .internal-shell,.internal-shell *{font-family:'Saira Semi Condensed',sans-serif!important;font-size:12px;font-weight:400}
@@ -206,7 +225,7 @@ button{appearance:none;border:none;outline:none;background:none;}
 const state={lang:'pt',trail:{base:[],modalidades:[],pratica:[]},quiz:null,sim:0};
 const el=k=>document.querySelector('.internal-page[data-page="'+k+'"] .internal-content'), tx=o=>o&&typeof o==='object'?(o[state.lang]||o.pt||o.en||Object.values(o)[0]):String(o||''), esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const roots={base:D.FUND||[],modalidades:D.MOD||[],pratica:D.PRAT||[]};
-const home=[['base','BASE','Fundamentos essenciais do jogo: mãos, posições, blinds, regras, staff, etiqueta e perfis.',I],['modalidades','MODALIDADES','Hold’em, Draw, Omaha, Stud, Razz, H.O.R.S.E., Mixed Games e outras variantes.',C],['pratica','PRÁTICA','Simulador, banco de quizzes e matemática do poker.',T],['evolucao','MINHA EVOLUÇÃO','Acertos, respostas, precisão e evolução dos treinos.',T],['historico','HISTÓRICO','Registro das sessões de quiz e simulador realizadas.',I],['perfil','PERFIL','Dados, idioma, preferências, plano e ecossistema STACKUP.',P]];
+const home=[['base','BASE','Fundamentos essenciais do jogo.',I],['modalidades','MODALIDADES','Variantes e formatos de poker.',C],['pratica','PRÁTICA','Simulador, quiz e matemática.',T],['evolucao','MINHA EVOLUÇÃO','Desempenho e progresso pessoal.',T],['historico','HISTÓRICO','Registro dos treinos realizados.',I],['perfil','PERFIL','Conta, preferências e planos.',P]];
 const icon=n=>n&&String(n.ic||'').startsWith('m_')?C:n&&String(n.ic||'').startsWith('p_')?T:I;
 const card=(id,title,desc,ic=I)=>'<button class="ref-card" data-ref="'+esc(id)+'"><span class="ref-icon">'+ic+'</span><b>'+esc(title)+'</b><small>'+esc(desc)+'</small></button>';
 function navMarkup(k){return k==='home'?'<div class="page-actions"><button class="page-action" data-exit>SAIR DO APP</button><button class="page-action" data-next>PRÓXIMA TELA</button></div>':'<div class="page-actions"><button class="page-action" data-inner-back>‹ VOLTAR</button><button class="page-action" data-home>⌂ HOME</button></div>'}
