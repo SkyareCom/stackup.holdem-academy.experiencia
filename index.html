@@ -1775,6 +1775,21 @@ a.qb.pflink{display:flex;align-items:center;justify-content:center;text-decorati
  #app #welcome .welcome-langs{margin-bottom:4px!important}
 }
 </style>
+<script src="assets/bg.js"></script>
+<script src="assets/logo.js"></script>
+<style id="premium-experience-theme">
+:root{--premium-bg:#020805;--premium-panel:rgba(8,20,13,.64);--premium-panel-strong:rgba(7,17,12,.78);--premium-line:rgba(97,255,152,.15);--premium-line-strong:rgba(106,255,161,.22);--premium-text:#f7f7f1;--premium-muted:rgba(247,247,241,.72);--premium-accent:#2adc62}
+html,body{background:#000!important;color:var(--premium-text)}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:#000 center/cover no-repeat;background-image:var(--academy-premium-bg,none)}
+body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(1,8,4,.14) 52%,rgba(0,0,0,.34)),radial-gradient(ellipse at 50% 57%,rgba(39,255,117,.10),transparent 32%)}
+.screen,.view,#app,.app,.page,.content{background-color:transparent!important}
+.card,.qcard,.pcard,.evsec,.modal,.sheet,.panel,.box,.lesson-card,.quiz-card,.plan-card{background:linear-gradient(180deg,var(--premium-panel),var(--premium-panel-strong))!important;border-color:var(--premium-line)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)!important}
+button,.btn,.qb,.nxt,.lang{border-color:var(--premium-line)!important}
+.nav,.bottom-nav,.footer,.dock{background:rgba(2,8,5,.88)!important;border-color:var(--premium-line)!important}
+</style>
+<script>
+(()=>{const apply=()=>{if(window.ACADEMY_BG)document.documentElement.style.setProperty('--academy-premium-bg',`url("${window.ACADEMY_BG}")`);};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();})();
+</script>
 </head>
 <body>
 <div id="app">
