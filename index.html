@@ -98,6 +98,33 @@ button{appearance:none;border:none;outline:none;background:none;}
 .page-actions{margin-bottom:12px!important}
 .ref-grid{gap:9px!important}
 </style>
+<style id="academy-audit-standard">
+:root{--ui-gap:10px;--ui-card-pad-x:14px;--ui-card-pad-y:12px;--ui-card-radius:14px;--ui-card-min:82px}
+.page-actions{gap:10px!important;margin:0 0 10px!important}
+.page-action{height:40px!important;min-height:40px!important;padding:0 12px!important}
+.ref-grid{gap:10px!important}
+.ref-card{height:82px!important;min-height:82px!important;max-height:82px!important;padding:10px 14px!important;grid-template-columns:42px minmax(0,1fr)!important;grid-template-rows:28px 32px!important;column-gap:12px!important;row-gap:2px!important}
+.ref-card b{height:28px!important;align-items:flex-end!important;margin:0!important}
+.ref-card small{height:32px!important;align-items:flex-start!important;margin:0!important}
+.lesson{gap:10px!important}
+.lesson>*,.lesson .lc,.lesson .rrow,.lesson .qcard{padding:12px 14px!important;border-radius:14px!important}
+.lesson .lc{display:block!important}
+.lesson h1,.lesson h2,.lesson h3,.lesson h4{margin:0 0 10px!important;padding:0!important}
+.lesson p{margin:0!important;padding:0!important}
+.lesson p+p{margin-top:10px!important}
+.lesson .ranking{display:grid!important;gap:10px!important;padding:0!important;border:0!important;background:transparent!important}
+.lesson .rrow{display:grid!important;grid-template-rows:24px 52px auto!important;gap:8px!important;min-height:122px!important;align-content:start!important}
+.lesson .rhead{display:flex!important;align-items:center!important;gap:10px!important;min-height:24px!important}
+.lesson .rpos{display:inline-block!important;min-width:22px!important;flex:0 0 22px!important}
+.lesson .rname{display:inline-block!important;min-width:0!important}
+.lesson .hand{display:flex!important;align-items:center!important;gap:5px!important;min-height:52px!important;flex-wrap:nowrap!important}
+.lesson .rnote{min-height:18px!important;margin:0!important}
+.lesson .cg{gap:8px!important}
+.lesson .ch{grid-template-columns:96px minmax(0,1fr)!important;column-gap:12px!important}
+.content-next{height:44px!important;min-height:44px!important;margin:10px 0 0!important}
+.quiz-box,.sim-box,.profile-box,.metric-box{padding:12px 14px!important;border-radius:14px!important;margin-bottom:10px!important}
+.section-label{margin-bottom:10px!important}
+</style>
 <style id="approved-internal-type">
 @import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600&display=swap');
 .internal-shell,.internal-shell *{font-family:'Saira Semi Condensed',sans-serif!important;font-size:12px;font-weight:400}
@@ -228,7 +255,7 @@ const roots={base:D.FUND||[],modalidades:D.MOD||[],pratica:D.PRAT||[]};
 const home=[['base','BASE','Fundamentos essenciais do jogo.',I],['modalidades','MODALIDADES','Variantes e formatos de poker.',C],['pratica','PRÁTICA','Simulador, quiz e matemática.',T],['evolucao','MINHA EVOLUÇÃO','Desempenho e progresso pessoal.',T],['historico','HISTÓRICO','Registro dos treinos realizados.',I],['perfil','PERFIL','Conta, preferências e planos.',P]];
 const icon=n=>n&&String(n.ic||'').startsWith('m_')?C:n&&String(n.ic||'').startsWith('p_')?T:I;
 const card=(id,title,desc,ic=I)=>'<button class="ref-card" data-ref="'+esc(id)+'"><span class="ref-icon">'+ic+'</span><b>'+esc(title)+'</b><small>'+esc(desc)+'</small></button>';
-function navMarkup(k){return k==='home'?'<div class="page-actions"><button class="page-action" data-exit>SAIR DO APP</button><button class="page-action" data-next>PRÓXIMA TELA</button></div>':'<div class="page-actions"><button class="page-action" data-inner-back>‹ VOLTAR</button><button class="page-action" data-home>⌂ HOME</button></div>'}
+function navMarkup(k){return k==='home'?'<div class="page-actions"><button class="page-action" data-home>⌂ HOME</button><button class="page-action" data-next>PRÓXIMA TELA</button></div>':'<div class="page-actions"><button class="page-action" data-inner-back>‹ VOLTAR</button><button class="page-action" data-home>⌂ HOME</button></div>'}
 function setTitle(k,t){const x=document.querySelector('.internal-page[data-page="'+k+'"] .internal-title');if(x)x.textContent=t||k.toUpperCase()}
 function list(k,nodes,title){const c=el(k);if(!c)return;c.innerHTML=navMarkup(k)+'<div class="ref-grid">'+nodes.map(n=>card(n.id,tx(n.t),tx(n.d),icon(n))).join('')+'</div>';setTitle(k,title||k.toUpperCase())}
 function renderRoot(k){state.trail[k]=[];list(k,roots[k]||[],k.toUpperCase())}
@@ -258,20 +285,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-ref]');if(
  const a=e.target.closest('[data-answer]');if(a)return answer(a,a.dataset.answer);const sa=e.target.closest('[data-sim-answer]');if(sa)return simAnswer(sa,sa.dataset.simAnswer);
  if(e.target.closest('[data-restart-quiz]')){state.quiz.i=0;state.quiz.ok=0;state.quiz.answered=false;renderQuiz();return}
  if(e.target.closest('[data-inner-back]')){const p=e.target.closest('.internal-page')?.dataset.page;if(p==='home'){renderHome();return}const t=state.trail[p]||[];t.pop();if(!t.length)renderRoot(p);else{const n=findNode(p,t[t.length-1]);if(n){t.pop();showNode(p,n)}}return}
- if(e.target.closest('[data-home]')){renderHome();goPage('home');return}
+ if(e.target.closest('[data-home]')){state.trail={base:[],modalidades:[],pratica:[]};renderHome();goPage('home');return} if(e.target.closest('[data-next]')){renderRoot('base');goPage('base');return}
  const l=e.target.closest('[data-content-lang]');if(l){state.lang=l.dataset.contentLang;renderHome();['base','modalidades','pratica'].forEach(renderRoot);renderProfile();return}});
 document.querySelectorAll('[data-page-target]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.pageTarget;if(k==='home')renderHome();else if(k==='perfil')renderProfile();else if(roots[k])renderRoot(k)}));
 })();
 </script>
-<script id="page-navigation-controls">
-(()=>{const back='<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',home='<svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/></svg>',exit='<svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 4h6v16h-6"/></svg>',next='<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
-function root(){document.querySelectorAll('.internal-page').forEach(x=>x.classList.remove('active'));document.querySelector('.internal-page[data-page="home"]')?.classList.add('active');document.querySelectorAll('.internal-nav button').forEach(x=>x.classList.toggle('active',x.dataset.pageTarget==='home'))}
-function exitApp(){document.getElementById('internal-shell')?.classList.remove('active')}
-function add(){document.querySelectorAll('.internal-page').forEach(p=>{const c=p.querySelector('.internal-content');if(!c||c.querySelector('.page-actions'))return;const k=p.dataset.page;const nav=document.createElement('div');nav.className='page-actions';if(k==='home')nav.innerHTML='<button class="page-action" data-exit>'+exit+'<span>SAIR DO APP</span></button><button class="page-action" data-next>'+next+'<span>PRÓXIMA TELA</span></button>';else nav.innerHTML='<button class="page-action" data-back>'+back+'<span>VOLTAR</span></button><button class="page-action" data-home>'+home+'<span>HOME</span></button>';c.prepend(nav);if(k==='perfil'){const b=document.createElement('button');b.className='profile-exit';b.dataset.exit='';b.innerHTML=exit+'<span>SAIR DO APP</span>';c.append(b)}})}
-document.addEventListener('click',e=>{if(e.target.closest('[data-exit]'))exitApp();if(e.target.closest('[data-home]'))root();if(e.target.closest('[data-next]'))document.querySelector('[data-page-target="base"]')?.click();if(e.target.closest('[data-back]'))history.back()});
-const o=new MutationObserver(add);o.observe(document.getElementById('internal-shell'),{subtree:true,childList:true});add();
-})();
-</script>
+<script id="page-navigation-controls">/* navigation unified in academy-live-engine */</script>
 <script id="semantic-card-icons">
 (()=>{const V='viewBox="0 0 24 24"';
 const icons={
