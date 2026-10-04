@@ -553,6 +553,17 @@ button{appearance:none;border:none;outline:none;background:none;}
  max-width:100%!important
 }
 </style>
+<style id="mobile-overflow-hard-fix">
+/* Impede qualquer card/filho de extrapolar a largura útil da tela. */
+.internal-shell,.internal-page,.internal-content,.content-view,.lesson,
+.ref-grid,.ref-card,.plan-grid,.apps-grid,.plan-card,.app-card,.profile-box,
+.quiz-box,.sim-box,.metric-box{max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+.internal-content{overflow-x:hidden!important}
+.plan-head,.app-head,.copy,.ref-card b,.ref-card small,.plan-desc,.app-desc,.plan-meta{min-width:0!important;max-width:100%!important}
+.plan-desc,.app-desc,.ref-card small,.plan-meta{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
+.app-actions{width:100%!important;min-width:0!important}
+.app-action{min-width:0!important;width:100%!important}
+</style>
 </head>
 <body>
 <main class="app">
