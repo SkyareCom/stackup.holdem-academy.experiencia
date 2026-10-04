@@ -112,8 +112,7 @@ button{appearance:none;border:none;outline:none;background:none;}
 .lesson h1,.lesson h2,.lesson h3,.lesson h4{margin:0 0 10px!important;padding:0!important}
 .lesson p{margin:0!important;padding:0!important}
 .lesson p+p{margin-top:10px!important}
-.lesson p+strong,.lesson p+b,.lesson p+h3,.lesson p+h4{display:block!important;margin-top:22px!important}
-.lesson strong+p,.lesson b+p,.lesson h3+p,.lesson h4+p{margin-top:5px!important}
+
 .lesson .ranking{display:grid!important;gap:10px!important;padding:0!important;border:0!important;background:transparent!important}
 .lesson .rrow{display:grid!important;grid-template-rows:24px 52px auto!important;gap:8px!important;min-height:122px!important;align-content:start!important}
 .lesson .rhead{display:flex!important;align-items:center!important;gap:10px!important;min-height:24px!important}
@@ -311,46 +310,30 @@ button{appearance:none;border:none;outline:none;background:none;}
 }
 </style>
 </style>
-<style id="lesson-topic-spacing-v2">
-/* Cadência vertical uniforme para subtópicos dentro do mesmo card */
-.lesson .lc > strong,
-.lesson .lc > b,
-.lesson .lc > h3,
-.lesson .lc > h4,
-.lesson > strong,
-.lesson > b,
-.lesson > h3,
-.lesson > h4{
-  display:block!important;
-  margin:0 0 7px!important;
-}
-.lesson .lc > p + strong,
-.lesson .lc > p + b,
-.lesson .lc > p + h3,
-.lesson .lc > p + h4,
-.lesson > p + strong,
-.lesson > p + b,
-.lesson > p + h3,
-.lesson > p + h4{
-  margin-top:20px!important;
-}
-.lesson .lc > strong + p,
-.lesson .lc > b + p,
-.lesson .lc > h3 + p,
-.lesson .lc > h4 + p,
-.lesson > strong + p,
-.lesson > b + p,
-.lesson > h3 + p,
-.lesson > h4 + p{
-  margin-top:0!important;
-}
-</style>
 </style>
 <style id="lesson-topic-blocks-v3">
-.lesson-topic{display:block!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important}
-.lesson-topic+.lesson-topic{margin-top:30px!important}
-.lesson-topic>strong,.lesson-topic>b,.lesson-topic>h3,.lesson-topic>h4{display:block!important;margin:0 0 7px!important;padding:0!important}
-.lesson-topic>p{margin:0!important;padding:0!important}
+.lesson .lesson-topic{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.lesson .lesson-topic + .lesson-topic{margin-top:18px!important}
+.lesson .lesson-topic > strong,
+.lesson .lesson-topic > b,
+.lesson .lesson-topic > h3,
+.lesson .lesson-topic > h4{
+  display:block!important;
+  margin:0 0 8px!important;
+  padding:0!important;
+}
+.lesson .lesson-topic > p{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+}
 </style>
 </head>
 <body>
