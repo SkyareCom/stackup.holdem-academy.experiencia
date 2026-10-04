@@ -270,6 +270,23 @@ button{appearance:none;border:none;outline:none;background:none;}
 <style id="evolution-training-controls">
 .quiz-nav,.history-actions,.save-pref{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.quiz-nav button,.history-actions button,.save-pref button{min-height:38px;border:1px solid rgba(57,223,111,.28);border-radius:10px;background:rgba(3,20,12,.72);color:#eef3ef;font:600 11px 'Saira Semi Condensed',sans-serif}.quiz-nav button:disabled{opacity:.35}.save-pref button.active{border-color:#39df6f;color:#39df6f}.history-actions{grid-template-columns:1fr 1fr 1fr}.evo-chart{display:flex;align-items:flex-end;gap:7px;height:92px;padding:10px 8px 0;margin-top:8px;border-bottom:1px solid rgba(255,255,255,.12)}.evo-bar{flex:1;min-width:8px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,rgba(57,223,111,.9),rgba(57,223,111,.18));min-height:4px}.section-stat{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:8px;align-items:center;margin-top:8px}.section-stat .track{height:5px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden}.section-stat .fill{height:100%;background:#39df6f}.rank-duel{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;text-align:center}.rank-duel b{font-size:18px!important}.history-state{font-size:10px;color:#39df6f;margin-top:4px}
 </style>
+<style id="fixed-top-navigation">
+/* Navegação superior sempre visível durante a rolagem do conteúdo */
+.internal-content>.page-actions:first-child{
+  position:sticky!important;
+  top:0!important;
+  z-index:80!important;
+  margin:0 0 10px!important;
+  padding:8px 0!important;
+  background:linear-gradient(180deg,rgba(2,18,11,.98) 0%,rgba(2,18,11,.94) 72%,rgba(2,18,11,0) 100%)!important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.internal-content>.page-actions:first-child .page-action{
+  position:relative!important;
+  z-index:81!important;
+}
+</style>
 </head>
 <body>
 <main class="app">
