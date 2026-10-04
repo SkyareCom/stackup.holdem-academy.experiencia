@@ -102,6 +102,9 @@ button{appearance:none;border:none;outline:none;background:none;}
 <style id="academy-live-content">
 .content-view{padding-bottom:18px}.lesson-lead{margin:0 0 10px;padding:11px 13px;border-left:2px solid #2adc62;background:rgba(7,17,12,.58);border-radius:0 12px 12px 0;color:rgba(247,247,241,.72);font:400 12px/1.4 'Saira Semi Condensed',sans-serif}.lesson{display:grid;gap:8px}.lesson>*,.lesson .lc,.lesson .rrow,.lesson .qcard{box-sizing:border-box;max-width:100%;margin:0;padding:11px 13px;border:1px solid rgba(97,255,152,.13);border-radius:14px;background:rgba(7,17,12,.58);color:rgba(247,247,241,.74);font:400 12px/1.42 'Saira Semi Condensed',sans-serif}.lesson h1,.lesson h2,.lesson h3,.lesson h4,.lesson b,.lesson strong{color:#f7f7f1;font:400 12px/1.25 'Saira Semi Condensed',sans-serif;text-transform:uppercase}.lesson p,.lesson li,.lesson span{font:400 12px/1.42 'Saira Semi Condensed',sans-serif}.lesson table{width:100%;border-collapse:collapse;font-size:12px}.lesson td,.lesson th{padding:6px;border-bottom:1px solid rgba(97,255,152,.12);text-align:left}.lesson img{max-width:100%}.lesson .pc{display:inline-flex!important;width:auto!important;min-width:30px!important;justify-content:center!important;margin:2px!important;padding:5px!important;background:#f2efe8!important;color:#111!important;border-radius:5px!important}.content-next{width:100%;min-height:42px;margin:10px 0;border:1px solid rgba(97,255,152,.22);border-radius:14px;background:rgba(18,70,38,.54);color:#f7f7f1;font:400 12px 'Saira Semi Condensed',sans-serif;text-transform:uppercase}.quiz-box,.sim-box,.profile-box,.metric-box{padding:12px;border:1px solid rgba(97,255,152,.14);border-radius:14px;background:rgba(7,17,12,.62);margin-bottom:9px}.quiz-progress{display:flex;justify-content:space-between;margin-bottom:9px;color:rgba(247,247,241,.58)}.quiz-prompt{color:#f7f7f1;margin-bottom:10px;line-height:1.4}.quiz-option{width:100%;min-height:40px;margin:5px 0;padding:8px 10px;border:1px solid rgba(97,255,152,.14);border-radius:12px;background:rgba(4,12,8,.64);color:#f7f7f1;text-align:left;font:400 12px 'Saira Semi Condensed',sans-serif}.quiz-option.ok{border-color:#2adc62;color:#2adc62}.quiz-option.bad{border-color:rgba(255,110,110,.7);color:#ff9b9b}.quiz-analysis{margin-top:8px;color:rgba(247,247,241,.68);line-height:1.4}.sim-cards{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.sim-card{padding:6px 8px;border-radius:6px;background:#f2efe8;color:#111}.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}.metric-box{text-align:center;margin:0}.metric-box b{display:block;font-size:18px;font-weight:400;color:#2adc62}.profile-box b{display:block;margin-bottom:5px;color:#f7f7f1}.empty-note{padding:18px;text-align:center;color:rgba(247,247,241,.55)}.section-label{margin:2px 0 8px;color:#2adc62;text-transform:uppercase}.ref-card{cursor:pointer}
 </style>
+<style id="creative-card-icons">
+.ref-icon{position:relative}.ref-icon::after{content:"";position:absolute;width:34px;height:34px;border:1px solid rgba(97,255,152,.10);border-radius:10px;transform:rotate(8deg);background:rgba(42,220,98,.025);z-index:0}.ref-icon svg{position:relative;z-index:1;width:25px!important;height:25px!important}
+</style>
 </head>
 <body>
 <main class="app">
@@ -239,6 +242,49 @@ function exitApp(){document.getElementById('internal-shell')?.classList.remove('
 function add(){document.querySelectorAll('.internal-page').forEach(p=>{const c=p.querySelector('.internal-content');if(!c||c.querySelector('.page-actions'))return;const k=p.dataset.page;const nav=document.createElement('div');nav.className='page-actions';if(k==='home')nav.innerHTML='<button class="page-action" data-exit>'+exit+'<span>SAIR DO APP</span></button><button class="page-action" data-next>'+next+'<span>PRÓXIMA TELA</span></button>';else nav.innerHTML='<button class="page-action" data-back>'+back+'<span>VOLTAR</span></button><button class="page-action" data-home>'+home+'<span>HOME</span></button>';c.prepend(nav);if(k==='perfil'){const b=document.createElement('button');b.className='profile-exit';b.dataset.exit='';b.innerHTML=exit+'<span>SAIR DO APP</span>';c.append(b)}})}
 document.addEventListener('click',e=>{if(e.target.closest('[data-exit]'))exitApp();if(e.target.closest('[data-home]'))root();if(e.target.closest('[data-next]'))document.querySelector('[data-page-target="base"]')?.click();if(e.target.closest('[data-back]'))history.back()});
 const o=new MutationObserver(add);o.observe(document.getElementById('internal-shell'),{subtree:true,childList:true});add();
+})();
+</script>
+<script id="semantic-card-icons">
+(()=>{const V='viewBox="0 0 24 24"';
+const icons={
+base:'<svg '+V+'><path d="M4 19.5V5a2 2 0 0 1 2-2h5v16H6a2 2 0 0 0-2 2.5"/><path d="M20 19.5V5a2 2 0 0 0-2-2h-5v16h5a2 2 0 0 1 2 2.5"/></svg>',
+modalidades:'<svg '+V+'><rect x="4" y="5" width="11" height="15" rx="2"/><path d="M8 9h3M8 13h3"/><path d="M9 5V3h9a2 2 0 0 1 2 2v12h-5"/></svg>',
+pratica:'<svg '+V+'><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="m14 10 5-5M16 5h3v3"/></svg>',
+evolucao:'<svg '+V+'><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m4 8 6-4 6 7 5-5"/></svg>',
+historico:'<svg '+V+'><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>',
+perfil:'<svg '+V+'><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>',
+rank:'<svg '+V+'><path d="m12 3 2.3 4.7 5.2.8-3.8 3.7.9 5.3-4.6-2.5-4.6 2.5.9-5.3-3.8-3.7 5.2-.8z"/></svg>',
+term:'<svg '+V+'><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>',
+pos:'<svg '+V+'><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2"/><path d="M12 5V3M12 21v-2M3 12H1M23 12h-2"/></svg>',
+blinds:'<svg '+V+'><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/><path d="M9 9v6M15 9v6"/></svg>',
+streets:'<svg '+V+'><path d="M3 7h4v4H3zM10 7h4v4h-4zM17 7h4v4h-4zM7 15h4v4H7zM14 15h4v4h-4z"/></svg>',
+seq:'<svg '+V+'><path d="M5 7h12M14 4l3 3-3 3M19 17H7M10 14l-3 3 3 3"/></svg>',
+cash:'<svg '+V+'><circle cx="12" cy="12" r="8"/><path d="M15 9.5c-.7-1-1.7-1.5-3-1.5-1.7 0-3 1-3 2.2 0 3.3 6 1.4 6 4.6 0 1.2-1.3 2.2-3 2.2-1.4 0-2.5-.6-3.2-1.6M12 6v12"/></svg>',
+tour:'<svg '+V+'><path d="M8 4h8v4a4 4 0 0 1-8 0zM10 14h4M12 12v6M8 20h8"/><path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4"/></svg>',
+staff:'<svg '+V+'><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2"/><path d="M3 20a6 6 0 0 1 12 0M14 20a4 4 0 0 1 7 0"/></svg>',
+rules:'<svg '+V+'><path d="M6 3h12v18H6z"/><path d="m9 8 1 1 2-2M9 13l1 1 2-2M14 8h2M14 13h2"/></svg>',
+etq:'<svg '+V+'><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7z"/><path d="m9 12 2 2 4-4"/></svg>',
+prof:'<svg '+V+'><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0M10.5 20a5.5 5.5 0 0 1 11 0"/></svg>',
+hold:'<svg '+V+'><rect x="4" y="5" width="7" height="12" rx="1.5"/><rect x="13" y="7" width="7" height="12" rx="1.5"/><path d="m7.5 9 1.2 1.5-1.2 1.5-1.2-1.5zM16.5 11c1.5-2 3 0 0 2-3-2-1.5-4 0-2z"/></svg>',
+draw5:'<svg '+V+'><path d="M5 6h10v14H5zM9 4h10v14"/><path d="m10 10 2-2 2 2-2 2z"/></svg>',
+plo:'<svg '+V+'><path d="M3 8h8v12H3zM7 6h8v12M11 4h8v12M15 2h6v12"/></svg>',
+stud:'<svg '+V+'><path d="M3 7h7v11H3zM9 5h7v11M15 3h6v11"/><circle cx="6.5" cy="12.5" r="1"/></svg>',
+razz:'<svg '+V+'><path d="M5 4h14v16H5z"/><path d="m8 8 8 8M16 8l-8 8"/></svg>',
+horse:'<svg '+V+'><path d="M5 19c1-6 1-11 5-14l6 2 3 5-4 1-2-2-2 3 3 5z"/><circle cx="14" cy="8" r=".7"/></svg>',
+mixed:'<svg '+V+'><path d="M4 7h12l4 5-4 5H4l4-5z"/><path d="M8 7l4 5-4 5M16 7l-4 5 4 5"/></svg>',
+carib:'<svg '+V+'><path d="M12 21V9M5 21h14"/><path d="M12 9C8 9 5 7 4 4c4 0 7 1 8 5M12 9c4 0 7-2 8-5-4 0-7 1-8 5"/></svg>',
+outras:'<svg '+V+'><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>',
+sim:'<svg '+V+'><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M8 12h4M10 10v4"/><circle cx="16" cy="11" r=".8"/><circle cx="17.5" cy="14" r=".8"/></svg>',
+quiz:'<svg '+V+'><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.7 2.7 0 1 1 4.3 2.2c-1.2.8-1.8 1.3-1.8 2.8M12 17h.01"/></svg>',
+math:'<svg '+V+'><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
+dados:'<svg '+V+'><circle cx="12" cy="8" r="3"/><path d="M6 19a6 6 0 0 1 12 0"/><path d="M19 5v4M17 7h4"/></svg>',
+idioma:'<svg '+V+'><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>',
+preferencias:'<svg '+V+'><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>',
+plano:'<svg '+V+'><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>',
+apps:'<svg '+V+'><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>'
+};
+function apply(){document.querySelectorAll('.ref-card[data-ref]').forEach(c=>{const k=c.dataset.ref,box=c.querySelector('.ref-icon');if(box&&icons[k])box.innerHTML=icons[k]})}
+new MutationObserver(apply).observe(document.getElementById('internal-shell'),{subtree:true,childList:true});apply();
 })();
 </script>
 </body>
