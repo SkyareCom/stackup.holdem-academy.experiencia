@@ -152,6 +152,8 @@ button{appearance:none;border:none;outline:none;background:none;}
 .plan-grid,.apps-grid{display:grid;gap:10px;margin-bottom:12px}
 .plan-card,.app-card{box-sizing:border-box;width:100%;padding:12px 14px;border:1px solid rgba(97,255,152,.15);border-radius:14px;background:rgba(7,17,12,.62)}
 .plan-head,.app-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:24px}
+.plan-card.current-plan{border-color:rgba(46,220,98,.72);box-shadow:inset 0 0 0 1px rgba(46,220,98,.16);background:linear-gradient(180deg,rgba(18,54,31,.78),rgba(7,17,12,.72))}
+.current-badge{display:inline-flex;align-items:center;min-height:20px;margin-top:8px;padding:0 8px;border:1px solid rgba(46,220,98,.42);border-radius:8px;color:#2adc62;font-size:10px!important;font-weight:600!important;letter-spacing:.05em;text-transform:uppercase}
 .plan-name,.app-name{color:#f7f7f1;font-weight:600!important;text-transform:uppercase}
 .plan-price,.app-price{white-space:nowrap;color:#2adc62;font-weight:600!important}
 .plan-desc,.app-desc{display:block;margin-top:7px;color:rgba(247,247,241,.66);line-height:1.35}
@@ -312,6 +314,7 @@ function simAnswer(btn,val){const q=(D.SIMB||[])[state.sim%(D.SIMB||[]).length],
 function renderHome(){const c=el('home');c.innerHTML=navMarkup('home')+'<div class="ref-grid">'+home.map(x=>card(...x)).join('')+'</div>';setTitle('home','HOME')}
 function renderProfile(){
  const p=progress(),pct=Math.round(p.ok/Math.max(1,p.answers)*100),c=el('perfil');
+ const currentPlan=localStorage.getItem('academy.experience.plan')||'FREE';
  const plans=[
   ['FREE','R$ 0','Acesso inicial ao Academy.','CONTEÚDO GRATUITO'],
   ['MENSAL','R$ 39,90','Acesso completo ao Academy.','COBRANÇA MENSAL'],
@@ -328,7 +331,7 @@ function renderProfile(){
   ['D ACTION','Treinamento e decisões em Omaha.','A DEFINIR'],
   ['ENTERPRISE','Gestão e soluções para clubes.','A DEFINIR']
  ];
- const planHtml=plans.map(x=>'<div class="plan-card"><div class="plan-head"><b class="plan-name">'+x[0]+'</b><b class="plan-price">'+x[1]+'</b></div><span class="plan-desc">'+x[2]+'</span><span class="plan-meta">'+x[3]+'</span></div>').join('');
+ const planHtml=plans.map(x=>{const active=x[0]===currentPlan;return '<div class="plan-card'+(active?' current-plan':'')+'"><div class="plan-head"><b class="plan-name">'+x[0]+'</b><b class="plan-price">'+x[1]+'</b></div><span class="plan-desc">'+x[2]+'</span><span class="plan-meta">'+x[3]+'</span>'+(active?'<span class="current-badge">PLANO ATUAL</span>':'')+'</div>'}).join('');
  const appHtml=apps.map(x=>'<div class="app-card"><div class="app-head"><b class="app-name">'+x[0]+'</b><b class="app-price">'+x[2]+'</b></div><span class="app-desc">'+x[1]+'</span><div class="app-actions"><button class="app-action" disabled>DOWNLOAD EM BREVE</button><button class="app-action" disabled>VALOR EM BREVE</button></div></div>').join('');
  c.innerHTML=navMarkup('perfil')+'<div class="metric-row"><div class="metric-box"><b>'+p.answers+'</b>RESPOSTAS</div><div class="metric-box"><b>'+p.ok+'</b>ACERTOS</div><div class="metric-box"><b>'+pct+'%</b>PRECISÃO</div></div><div class="profile-box"><b>MEUS DADOS</b><span>Acesso atual ao STACKUP HOLD’EM ACADEMY.</span></div><div class="profile-box"><b>IDIOMA</b><div class="lang-row"><button class="lang-btn" data-content-lang="pt">PT-BR</button><button class="lang-btn" data-content-lang="en">EN-US</button><button class="lang-btn" data-content-lang="es">ES-ES</button></div></div><div class="profile-section-title">PLANOS DO ACADEMY</div><div class="plan-grid">'+planHtml+'</div><div class="profile-section-title">APPS STACKUP HOLD’EM</div><div class="apps-grid">'+appHtml+'</div><button class="profile-exit" data-exit>SAIR DO APP</button>';
  setTitle('perfil','PERFIL');syncScrollState(document)
