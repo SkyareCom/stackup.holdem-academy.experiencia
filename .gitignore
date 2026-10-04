@@ -1,0 +1,27 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+keystore.properties
+credentials*.json
+service-account*.json
+google-services.json
+
+# Local Android / IDE files
+local.properties
+.gradle/
+**/build/
+.idea/
+.vscode/
+
+# Local runtime files
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
