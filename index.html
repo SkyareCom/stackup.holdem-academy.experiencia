@@ -527,6 +527,17 @@ button{appearance:none;border:none;outline:none;background:none;}
 .root-section-view>.ref-grid>.ref-card b{height:24px!important}
 .root-section-view>.ref-grid>.ref-card small{height:28px!important}
 </style>
+<style id="root-card-single-line-copy">
+.root-section-view>.ref-grid>.ref-card small{
+ display:block!important;
+ white-space:nowrap!important;
+ overflow:hidden!important;
+ text-overflow:clip!important;
+ line-height:28px!important;
+ height:28px!important;
+ max-width:100%!important
+}
+</style>
 </head>
 <body>
 <main class="app">
@@ -673,7 +684,35 @@ function navMarkup(k,inner=false){
 }
 function setTitle(k,t){const page=document.querySelector('.internal-page[data-page="'+k+'"]'),label=t||k.toUpperCase();if(!page)return;const x=page.querySelector('.internal-title');if(x){x.textContent='';x.setAttribute('aria-hidden','true')}const c=page.querySelector('.internal-content');if(!c)return;let h=c.querySelector('.content-section-title');if(!h){h=document.createElement('div');h.className='content-section-title';const a=c.querySelector('.page-actions');if(a)a.insertAdjacentElement('afterend',h);else c.prepend(h)}h.textContent=label}
 function list(k,nodes,title,inner=false){const c=el(k);if(!c)return;c.innerHTML=navMarkup(k,inner)+'<div class="ref-grid">'+nodes.map(n=>card(n.id,tx(n.t),tx(n.d),icon(n))).join('')+'</div>';setTitle(k,title||k.toUpperCase())}
-function renderRoot(k){state.trail[k]=[];const page=el(k);if(page)page.classList.add('root-section-view');const nodes=k==='pratica'?[...(roots[k]||[]),{id:'evolucao',t:{pt:'Minha evolução',en:'My progress',es:'Mi evolución'},d:{pt:'Desempenho e progresso pessoal.',en:'Performance and personal progress.',es:'Rendimiento y progreso personal.'},ic:'p_evolucao'},{id:'historico',t:{pt:'Histórico',en:'History',es:'Historial'},d:{pt:'Registro dos treinos realizados.',en:'Training history.',es:'Historial de entrenamientos.'},ic:'p_historico'}]:(roots[k]||[]);list(k,nodes,k==='modalidades'?ui('MODALIDADES','GAME TYPES','MODALIDADES'):k==='pratica'?ui('PRÁTICA','PRACTICE','PRÁCTICA'):ui('BASE','BASE','BASE'))}
+const ROOT_DESC={
+ rank:{pt:'Mãos da mais forte à mais fraca.',en:'Hands from strongest to weakest.',es:'Manos de mayor a menor fuerza.'},
+ term:{pt:'Vocabulário essencial do poker.',en:'Essential poker vocabulary.',es:'Vocabulario esencial del poker.'},
+ pos:{pt:'Posições e ordem da mesa.',en:'Positions and table order.',es:'Posiciones y orden de mesa.'},
+ blinds:{pt:'Blinds e formação do pote.',en:'Blinds and pot formation.',es:'Ciegas y formación del bote.'},
+ streets:{pt:'Pré-flop, flop, turn e river.',en:'Preflop, flop, turn and river.',es:'Preflop, flop, turn y river.'},
+ seq:{pt:'Ordem das ações na mesa.',en:'Table action order.',es:'Orden de acciones en mesa.'},
+ cash:{pt:'Estrutura e formatos de cash.',en:'Cash structure and formats.',es:'Estructura y formatos de cash.'},
+ tour:{pt:'Fases e formatos de torneio.',en:'Tournament stages and formats.',es:'Fases y formatos de torneo.'},
+ staff:{pt:'Dealer, floor e responsabilidades.',en:'Dealer, floor and responsibilities.',es:'Dealer, floor y responsabilidades.'},
+ rules:{pt:'Regras essenciais da mesa.',en:'Essential table rules.',es:'Reglas esenciales de mesa.'},
+ etq:{pt:'Etiqueta e ritmo de jogo.',en:'Etiquette and game pace.',es:'Etiqueta y ritmo de juego.'},
+ prof:{pt:'Perfis e estilos de jogador.',en:'Player profiles and styles.',es:'Perfiles y estilos de jugador.'},
+ hold:{pt:'2 cartas + 5 comunitárias.',en:'2 hole + 5 community cards.',es:'2 propias + 5 comunitarias.'},
+ draw5:{pt:'5 cartas e troca de cartas.',en:'5 cards and card exchange.',es:'5 cartas y cambio de cartas.'},
+ plo:{pt:'Omaha com 4, 5 ou 6 cartas.',en:'Omaha with 4, 5 or 6 cards.',es:'Omaha con 4, 5 o 6 cartas.'},
+ stud:{pt:'Stud com cartas abertas e fechadas.',en:'Stud with open and closed cards.',es:'Stud con cartas abiertas y cerradas.'},
+ razz:{pt:'Stud lowball de mão baixa.',en:'Low-hand Stud lowball.',es:'Stud lowball de mano baja.'},
+ horse:{pt:'Cinco jogos em Fixed-Limit.',en:'Five Fixed-Limit games.',es:'Cinco juegos Fixed-Limit.'},
+ mixed:{pt:'Variantes e sistemas high/low.',en:'Variants and high/low systems.',es:'Variantes y sistemas high/low.'},
+ carib:{pt:'Poker de cassino contra a casa.',en:'Casino poker against the house.',es:'Poker de casino contra la casa.'},
+ sim:{pt:'Treine mãos e regras.',en:'Train hands and rules.',es:'Entrena manos y reglas.'},
+ quiz:{pt:'Teste mãos e conceitos.',en:'Test hands and concepts.',es:'Prueba manos y conceptos.'},
+ math:{pt:'Outs, odds e cálculos.',en:'Outs, odds and calculations.',es:'Outs, odds y cálculos.'},
+ evolucao:{pt:'Desempenho e progresso.',en:'Performance and progress.',es:'Rendimiento y progreso.'},
+ historico:{pt:'Treinos realizados.',en:'Completed trainings.',es:'Entrenamientos realizados.'}
+};
+function rootNodes(k,nodes){return nodes.map(n=>ROOT_DESC[n.id]?{...n,d:ROOT_DESC[n.id]}:n)}
+function renderRoot(k){state.trail[k]=[];const page=el(k);if(page)page.classList.add('root-section-view');const nodes=k==='pratica'?[...(roots[k]||[]),{id:'evolucao',t:{pt:'Minha evolução',en:'My progress',es:'Mi evolución'},d:{pt:'Desempenho e progresso pessoal.',en:'Performance and personal progress.',es:'Rendimiento y progreso personal.'},ic:'p_evolucao'},{id:'historico',t:{pt:'Histórico',en:'History',es:'Historial'},d:{pt:'Registro dos treinos realizados.',en:'Training history.',es:'Historial de entrenamientos.'},ic:'p_historico'}]:(roots[k]||[]);list(k,rootNodes(k,nodes),k==='modalidades'?ui('MODALIDADES','GAME TYPES','MODALIDADES'):k==='pratica'?ui('PRÁTICA','PRACTICE','PRÁCTICA'):ui('BASE','BASE','BASE'))}
 function findNode(k,id,nodes=roots[k]||[]){for(const n of nodes){if(n.id===id)return n;if(n.sub){const q=findNode(k,id,n.sub);if(q)return q}}return null}
 function showNode(k,n){const page=el(k);if(page)page.classList.remove('root-section-view');state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n.sub.length){list(k,n.sub,tx(n.t),true);return}
  const c=el(k),lead=n.lead?'<p class="lesson-lead">'+esc(tx(n.lead))+'</p>':'',body=n.html?'<div class="lesson">'+n.html+'</div>':'';
