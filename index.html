@@ -603,6 +603,14 @@ button{appearance:none;border:none;outline:none;background:none;}
 .evo-kpi{display:grid!important;gap:5px!important}
 .perf-metric{display:grid!important;gap:4px!important}
 </style>
+<style id="full-app-text-separation-audit">
+/* Auditoria global: elementos textuais irmãos nunca ficam visualmente colados. */
+.evo-level,.rank-duel>div,.evo-legend>div,.evo-topic-head,.evo-section-total,
+.evo-activity-score,.section-stat,.plan-head,.app-head,.quiz-meta,.sim-meta,
+.history-actions,.metric-row,.profile-row{column-gap:8px!important}
+.evo-level b,.evo-level span,.rank-duel span,.rank-duel b,.evo-legend span,.evo-legend b,
+.evo-topic-head b,.evo-topic-head span,.evo-section-total>*{margin-inline:0!important}
+</style>
 </head>
 <body>
 <main class="app">
