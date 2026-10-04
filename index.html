@@ -204,6 +204,16 @@ button{appearance:none;border:none;outline:none;background:none;}
 .lesson .dbtn{position:absolute;z-index:3;left:82%;top:57%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e7ece8;color:#07130c;font:700 10px/1 'Saira Semi Condensed',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 @media(max-width:420px){.lesson .pb{height:270px}.lesson .seat{width:48px;height:30px}.lesson .sl2{font-size:10px}.lesson .pt:after{font-size:9px}}
 </style>
+<style id="training-table-memory">
+.quiz-table-memory{position:relative;width:100%;height:180px;margin:8px 0 14px;box-sizing:border-box}
+.quiz-table-memory .qtm-felt{position:absolute;left:15%;right:15%;top:16%;bottom:16%;border:2px solid rgba(63,221,111,.45);border-radius:48%/42%;background:linear-gradient(180deg,rgba(5,67,37,.88),rgba(3,42,25,.94));box-shadow:inset 0 0 0 6px rgba(1,12,8,.26)}
+.qtm-seat{position:absolute;z-index:2;transform:translate(-50%,-50%);min-width:38px;height:24px;padding:0 5px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(63,221,111,.38);border-radius:8px;background:rgba(2,16,10,.94);color:#f4f5f2;font-size:9px;font-weight:600}
+.qtm-seat.a{border-color:#39df6f;color:#39df6f}.qtm-u1{left:20%;top:10%}.qtm-u2{left:7%;top:34%}.qtm-m1{left:7%;top:66%}.qtm-m2{left:20%;top:90%}.qtm-lj{left:40%;top:95%}.qtm-hj{left:60%;top:95%}.qtm-co{left:80%;top:90%}.qtm-btn{left:93%;top:66%}.qtm-sb{left:93%;top:34%}.qtm-bb{left:80%;top:10%}
+.qtm-board{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:4px}
+.qtm-card{width:25px;height:34px;border:1px solid rgba(255,255,255,.28);border-radius:5px;background:rgba(1,13,8,.82);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.38);font-size:9px;font-weight:600}
+.qtm-card.on{background:rgba(245,247,244,.94);color:#0b1a11;border-color:#fff}
+.qtm-hero{position:absolute;z-index:3;left:50%;bottom:18%;transform:translateX(-50%);display:flex;gap:4px}.qtm-hero .qtm-card{width:27px;height:37px}
+</style>
 </head>
 <body>
 <main class="app">
@@ -316,9 +326,21 @@ function showNode(k,n){state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n
 function progress(){try{return JSON.parse(localStorage.getItem('academy.experience.progress')||'{"answers":0,"ok":0,"runs":[]}')}catch(e){return {answers:0,ok:0,runs:[]}}}
 function saveProgress(p){localStorage.setItem('academy.experience.progress',JSON.stringify(p))}
 function startQuiz(k,n){const qs=n.quiz||[];state.quiz={k,n,qs,i:0,ok:0,answered:false};renderQuiz()}
+function trainingTable(qz,q){
+ const title=tx(qz.n.t).toLowerCase(),prompt=String(q.prompt||'').toLowerCase(),id=String(qz.n.id||'').toLowerCase();
+ const pos=/posi|position|utg|button|btn|blind|cutoff|hijack|lojack|\bco\b|\bsb\b|\bbb\b/.test(title+' '+prompt+' '+id);
+ const cards=/carta|card|flop|turn|river|board|street|mão|hand|community|comunit|naipe|suit|poker/.test(title+' '+prompt+' '+id);
+ if(!pos&&!cards)return '';
+ const seats=[['u1','UTG1'],['u2','UTG2'],['m1','MP1'],['m2','MP2'],['lj','LJ'],['hj','HJ'],['co','CO'],['btn','BTN'],['sb','SB'],['bb','BB']];
+ let active='';for(const s of seats){if(new RegExp('(^|\\W)'+s[1].toLowerCase()+'(\\W|$)','i').test(prompt)){active=s[1];break}}
+ let n=0;if(/river/.test(prompt))n=5;else if(/turn/.test(prompt))n=4;else if(/flop/.test(prompt))n=3;
+ const seatHtml=pos?seats.map(s=>'<span class="qtm-seat qtm-'+s[0]+(active===s[1]?' a':'')+'">'+s[1]+'</span>').join(''):'';
+ const board=cards?'<div class="qtm-board">'+[0,1,2,3,4].map(i=>'<span class="qtm-card '+(i<n?'on':'')+'">'+(i<n?'●':'?')+'</span>').join('')+'</div>':'';
+ return '<div class="quiz-table-memory" aria-label="'+ui('Mesa de apoio visual para memorização','Visual poker table for memorization','Mesa visual de apoyo para memorización')+'"><div class="qtm-felt"></div>'+seatHtml+board+'</div>'
+}
 function renderQuiz(){const qz=state.quiz;if(!qz)return;const q=qz.qs[qz.i],c=el(qz.k);if(!q){const p=progress();p.runs.push({type:'quiz',title:tx(qz.n.t),ok:qz.ok,total:qz.qs.length,at:Date.now()});saveProgress(p);c.innerHTML=navMarkup(qz.k)+'<div class="quiz-box"><div class="section-label">'+ui('TREINO CONCLUÍDO','TRAINING COMPLETE','ENTRENAMIENTO COMPLETADO')+'</div><div class="metric-row"><div class="metric-box"><b>'+qz.ok+'</b>'+ui('ACERTOS','CORRECT','ACIERTOS')+'</div><div class="metric-box"><b>'+qz.qs.length+'</b>'+ui('QUESTÕES','QUESTIONS','PREGUNTAS')+'</div><div class="metric-box"><b>'+Math.round(qz.ok/Math.max(1,qz.qs.length)*100)+'%</b>'+ui('PRECISÃO','ACCURACY','PRECISIÓN')+'</div></div></div><button class="content-next" data-restart-quiz>'+ui('RECOMEÇAR TREINO','RESTART TRAINING','REINICIAR ENTRENAMIENTO')+'</button>';return}
  const opts=(q.options||q.items||[]).map(o=>'<button class="quiz-option" data-answer="'+esc(o)+'">'+esc(o)+'</button>').join('');
- c.innerHTML=navMarkup(qz.k)+'<div class="quiz-box"><div class="quiz-progress"><span>'+esc(tx(qz.n.t))+'</span><span>'+(qz.i+1)+' / '+qz.qs.length+'</span></div><div class="quiz-prompt">'+esc(q.prompt)+'</div>'+opts+'<div class="quiz-analysis" id="quiz-analysis"></div></div>'}
+ c.innerHTML=navMarkup(qz.k)+'<div class="quiz-box"><div class="quiz-progress"><span>'+esc(tx(qz.n.t))+'</span><span>'+(qz.i+1)+' / '+qz.qs.length+'</span></div>'+trainingTable(qz,q)+'<div class="quiz-prompt">'+esc(q.prompt)+'</div>'+opts+'<div class="quiz-analysis" id="quiz-analysis"></div></div>'}
 function answer(btn,val){const z=state.quiz;if(!z||z.answered)return;const q=z.qs[z.i],ok=Array.isArray(q.answer)?false:val===q.answer;z.answered=true;if(ok)z.ok++;const p=progress();p.answers++;if(ok)p.ok++;saveProgress(p);btn.parentElement.querySelectorAll('.quiz-option').forEach(b=>{if(b.dataset.answer===String(q.answer))b.classList.add('ok');else if(b===btn&&!ok)b.classList.add('bad');b.disabled=true});const a=document.getElementById('quiz-analysis');if(a)a.innerHTML='<b>'+(ok?'CORRETO':'AJUSTAR')+'</b><br>'+esc(q.analysis||'');setTimeout(()=>{z.i++;z.answered=false;renderQuiz()},850)}
 function showSimulator(k){const bank=D.SIMB||[];const q=bank[state.sim%bank.length],c=el(k);if(!q){c.innerHTML=navMarkup(k)+'<div class="empty-note">'+ui('Banco do simulador indisponível.','Simulator bank unavailable.','Banco del simulador no disponible.')+'</div>';return}setTitle(k,ui('SIMULADOR','SIMULATOR','SIMULADOR'));const cards=(q.heroCards||'').split(/\s+/).filter(Boolean).map(x=>'<span class="sim-card">'+esc(x)+'</span>').join('');const board=(q.board||'').split(/\s+/).filter(Boolean).map(x=>'<span class="sim-card">'+esc(x)+'</span>').join('');c.innerHTML=navMarkup(k)+'<div class="sim-box"><div class="section-label">'+esc(q.game)+' · '+esc(q.street||q.phase||'')+'</div><div>'+esc(q.context||'')+'</div><div class="sim-cards">'+cards+'</div><div class="sim-cards">'+board+'</div><div class="quiz-prompt">'+esc(q.question)+'</div>'+(q.options||[]).map(o=>'<button class="quiz-option" data-sim-answer="'+esc(o)+'">'+esc(o)+'</button>').join('')+'<div class="quiz-analysis" id="sim-analysis"></div></div>'}
 function simAnswer(btn,val){const q=(D.SIMB||[])[state.sim%(D.SIMB||[]).length],ok=val===q.answer,p=progress();p.answers++;if(ok)p.ok++;p.runs.push({type:'sim',title:q.game,ok:ok?1:0,total:1,at:Date.now()});saveProgress(p);btn.parentElement.querySelectorAll('.quiz-option').forEach(b=>{if(b.dataset.simAnswer===String(q.answer))b.classList.add('ok');else if(b===btn&&!ok)b.classList.add('bad');b.disabled=true});document.getElementById('sim-analysis').innerHTML='<b>'+(ok?'CORRETO':'AJUSTAR')+'</b><br>'+esc(q.why||'');setTimeout(()=>{state.sim++;showSimulator('pratica')},1000)}
