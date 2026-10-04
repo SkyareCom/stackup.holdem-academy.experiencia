@@ -74,9 +74,10 @@ button{appearance:none;border:none;outline:none;background:none;}
 .internal-title{display:inline-flex;align-items:center;min-height:34px;padding:7px 14px;border:1px solid var(--line2);border-radius:18px;background:rgba(8,20,13,.34);font:700 12px/1 'Saira',sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#f2efe8}
 .internal-content{height:calc(100% - 64px)}
 .internal-nav{position:absolute;left:0;right:0;bottom:0;z-index:3;height:66px;padding:0 8px max(4px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);align-items:center;background:rgba(2,8,5,.86);border-top:1px solid rgba(97,255,152,.15);backdrop-filter:blur(10px)}
-.internal-nav button{height:52px;padding:0 2px;color:rgba(247,247,241,.58);font:600 10px/1 'Saira',sans-serif;text-transform:uppercase;letter-spacing:.02em}
-.internal-nav button.active{color:#f7f7f1}
-.internal-nav button.active::after{content:"";display:block;width:22px;height:2px;margin:7px auto 0;border-radius:2px;background:#2adc62;box-shadow:0 0 8px rgba(42,220,98,.45)}
+.internal-nav button{height:52px;padding:4px 2px 2px;color:rgba(247,247,241,.48);font:600 10px/1 'Saira',sans-serif;text-transform:uppercase;letter-spacing:.02em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.internal-nav button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.internal-nav button.active{color:#2adc62}
+.internal-nav button.active::after{display:none!important}
 </style>
 </head>
 <body>
@@ -123,7 +124,7 @@ button{appearance:none;border:none;outline:none;background:none;}
   <section class="internal-page" data-page="pratica"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PRÁTICA</div></header><div class="internal-content"></div></section>
   <section class="internal-page" data-page="perfil"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PERFIL</div></header><div class="internal-content"></div></section>
   <nav class="internal-nav" aria-label="Navegação principal">
-    <button class="active" data-page-target="home">HOME</button><button data-page-target="base">BASE</button><button data-page-target="modalidades">MODALIDADES</button><button data-page-target="pratica">PRÁTICA</button><button data-page-target="perfil">PERFIL</button>
+    <button class="active" data-page-target="home"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M9.5 20v-6h5v6"/></svg><span>HOME</span></button><button data-page-target="base"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg><span>BASE</span></button><button data-page-target="modalidades"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="16" rx="2"/><path d="m8 8 2-2 2 2-2 2z"/><path d="M19 7v12a2 2 0 0 1-2 2H8"/></svg><span>MODALIDADES</span></button><button data-page-target="pratica"><svg viewBox="0 0 24 24"><path d="M12 3v4"/><path d="M5.6 5.6 8.4 8.4"/><path d="M3 12h4"/><circle cx="13" cy="13" r="6"/><path d="m10.5 13 1.7 1.7 3.3-3.4"/></svg><span>PRÁTICA</span></button><button data-page-target="perfil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><span>PERFIL</span></button>
   </nav>
 </section>
   <div id="toast" aria-live="polite"></div>
