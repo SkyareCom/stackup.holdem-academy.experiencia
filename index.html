@@ -515,6 +515,18 @@ button{appearance:none;border:none;outline:none;background:none;}
  .perf-metric{padding:12px 10px!important}
 }
 </style>
+<style id="root-section-card-height">
+.root-section-view>.ref-grid>.ref-card{
+ height:70px!important;
+ min-height:70px!important;
+ max-height:70px!important;
+ padding:8px 14px!important;
+ grid-template-rows:24px 28px!important;
+ row-gap:2px!important
+}
+.root-section-view>.ref-grid>.ref-card b{height:24px!important}
+.root-section-view>.ref-grid>.ref-card small{height:28px!important}
+</style>
 </head>
 <body>
 <main class="app">
@@ -661,9 +673,9 @@ function navMarkup(k,inner=false){
 }
 function setTitle(k,t){const page=document.querySelector('.internal-page[data-page="'+k+'"]'),label=t||k.toUpperCase();if(!page)return;const x=page.querySelector('.internal-title');if(x){x.textContent='';x.setAttribute('aria-hidden','true')}const c=page.querySelector('.internal-content');if(!c)return;let h=c.querySelector('.content-section-title');if(!h){h=document.createElement('div');h.className='content-section-title';const a=c.querySelector('.page-actions');if(a)a.insertAdjacentElement('afterend',h);else c.prepend(h)}h.textContent=label}
 function list(k,nodes,title,inner=false){const c=el(k);if(!c)return;c.innerHTML=navMarkup(k,inner)+'<div class="ref-grid">'+nodes.map(n=>card(n.id,tx(n.t),tx(n.d),icon(n))).join('')+'</div>';setTitle(k,title||k.toUpperCase())}
-function renderRoot(k){state.trail[k]=[];const nodes=k==='pratica'?[...(roots[k]||[]),{id:'evolucao',t:{pt:'Minha evolução',en:'My progress',es:'Mi evolución'},d:{pt:'Desempenho e progresso pessoal.',en:'Performance and personal progress.',es:'Rendimiento y progreso personal.'},ic:'p_evolucao'},{id:'historico',t:{pt:'Histórico',en:'History',es:'Historial'},d:{pt:'Registro dos treinos realizados.',en:'Training history.',es:'Historial de entrenamientos.'},ic:'p_historico'}]:(roots[k]||[]);list(k,nodes,k==='modalidades'?ui('MODALIDADES','GAME TYPES','MODALIDADES'):k==='pratica'?ui('PRÁTICA','PRACTICE','PRÁCTICA'):ui('BASE','BASE','BASE'))}
+function renderRoot(k){state.trail[k]=[];const page=el(k);if(page)page.classList.add('root-section-view');const nodes=k==='pratica'?[...(roots[k]||[]),{id:'evolucao',t:{pt:'Minha evolução',en:'My progress',es:'Mi evolución'},d:{pt:'Desempenho e progresso pessoal.',en:'Performance and personal progress.',es:'Rendimiento y progreso personal.'},ic:'p_evolucao'},{id:'historico',t:{pt:'Histórico',en:'History',es:'Historial'},d:{pt:'Registro dos treinos realizados.',en:'Training history.',es:'Historial de entrenamientos.'},ic:'p_historico'}]:(roots[k]||[]);list(k,nodes,k==='modalidades'?ui('MODALIDADES','GAME TYPES','MODALIDADES'):k==='pratica'?ui('PRÁTICA','PRACTICE','PRÁCTICA'):ui('BASE','BASE','BASE'))}
 function findNode(k,id,nodes=roots[k]||[]){for(const n of nodes){if(n.id===id)return n;if(n.sub){const q=findNode(k,id,n.sub);if(q)return q}}return null}
-function showNode(k,n){state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n.sub.length){list(k,n.sub,tx(n.t),true);return}
+function showNode(k,n){const page=el(k);if(page)page.classList.remove('root-section-view');state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n.sub.length){list(k,n.sub,tx(n.t),true);return}
  const c=el(k),lead=n.lead?'<p class="lesson-lead">'+esc(tx(n.lead))+'</p>':'',body=n.html?'<div class="lesson">'+n.html+'</div>':'';
  if(n.sim){showSimulator(k);return}
  if(!n.html&&n.quiz){startQuiz(k,n);return}
