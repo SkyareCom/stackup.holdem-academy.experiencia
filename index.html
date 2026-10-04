@@ -463,6 +463,15 @@ button{appearance:none;border:none;outline:none;background:none;}
 .evo-day.l2{background:rgba(42,220,98,.34)!important;color:#f7f7f1!important;border-color:rgba(97,255,152,.42)!important}
 .evo-day.l3{background:rgba(42,220,98,.58)!important;color:#fff!important;border-color:rgba(97,255,152,.62)!important}
 </style>
+</style>
+<style id="evolution-activity-history">
+.evo-activity-list{display:grid!important;gap:0!important;margin-top:12px!important;border-top:1px solid rgba(97,255,152,.13)!important}
+.evo-activity-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;padding:10px 0!important;border-bottom:1px solid rgba(97,255,152,.10)!important}
+.evo-activity-row>div{min-width:0!important;display:grid!important;gap:2px!important}
+.evo-activity-row b{font:600 11px/1.15 'Saira Semi Condensed','Saira',sans-serif!important;color:#f7f7f1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.evo-activity-row span{font:400 9px/1.2 'Saira Semi Condensed','Saira',sans-serif!important;color:rgba(247,247,241,.55)!important;text-transform:uppercase!important}
+.evo-activity-score{text-align:right!important}
+</style>
 </head>
 <body>
 <main class="app">
@@ -650,7 +659,7 @@ function renderStats(){
  +'<div class="evo-panel"><strong>'+ui('RESUMO DE PERFORMANCE','PERFORMANCE SUMMARY','RESUMEN DE RENDIMIENTO')+'</strong><div class="evo-grid2"><div class="evo-mini"><b>'+recentAvg+'%</b><span>'+ui('MÉDIA · 12 ÚLTIMOS','AVG · LAST 12','MEDIA · ÚLTIMOS 12')+'</span></div><div class="evo-mini"><b>'+(delta>0?'+':'')+delta+'%</b><span>'+ui('VARIAÇÃO','CHANGE','VARIACIÓN')+'</span></div><div class="evo-mini"><b>'+best+'%</b><span>'+ui('MELHOR SESSÃO','BEST SESSION','MEJOR SESIÓN')+'</span></div><div class="evo-mini"><b>'+done+'</b><span>'+ui('TREINOS CONCLUÍDOS','COMPLETED','COMPLETADOS')+'</span></div></div></div>'
  +'<div class="evo-panel"><strong>'+ui('DESEMPENHO POR SEÇÃO','PERFORMANCE BY SECTION','RENDIMIENTO POR SECCIÓN')+'</strong><div class="evo-bars">'+secRows+'</div></div>'
  +'<div class="evo-panel"><strong>'+ui('EVOLUÇÃO · ÚLTIMOS 12 TREINOS','PROGRESS · LAST 12 TRAININGS','EVOLUCIÓN · ÚLTIMOS 12 ENTRENAMIENTOS')+'</strong>'+(recent.length?'<svg class="evo-line" viewBox="0 0 300 90" preserveAspectRatio="none"><line class="grid" x1="0" y1="20" x2="300" y2="20"/><line class="grid" x1="0" y1="45" x2="300" y2="45"/><line class="grid" x1="0" y1="70" x2="300" y2="70"/><polyline points="'+poly+'"/>'+dots+'</svg>':'<div class="evo-muted">'+ui('COMPLETE TREINOS PARA FORMAR A CURVA DE EVOLUÇÃO.','COMPLETE TRAININGS TO BUILD YOUR PROGRESS CURVE.','COMPLETA ENTRENAMIENTOS PARA FORMAR LA CURVA DE EVOLUCIÓN.')+'</div>')+'<div class="evo-muted">'+done+' '+ui('CONCLUÍDOS','COMPLETED','COMPLETADOS')+' · '+inprog+' '+ui('EM ANDAMENTO','IN PROGRESS','EN CURSO')+'</div></div>'
- +'<div class="evo-panel"><strong>'+ui('ATIVIDADE · ÚLTIMOS 28 DIAS','ACTIVITY · LAST 28 DAYS','ACTIVIDAD · ÚLTIMOS 28 DÍAS')+'</strong><div class="evo-heat">'+activity+'</div><div class="evo-muted">'+ui('MAIS INTENSO = MAIS SESSÕES NO DIA','DARKER = MORE SESSIONS THAT DAY','MÁS INTENSO = MÁS SESIONES EN EL DÍA')+'</div></div>'
+ +'<div class="evo-panel"><strong>'+ui('ATIVIDADE · ÚLTIMOS 28 DIAS','ACTIVITY · LAST 28 DAYS','ACTIVIDAD · ÚLTIMOS 28 DÍAS')+'</strong><div class="evo-heat">'+activity+'</div><div class="evo-muted">'+ui('MAIS INTENSO = MAIS SESSÕES NO DIA','DARKER = MORE SESSIONS THAT DAY','MÁS INTENSO = MÁS SESIONES EN EL DÍA')+'</div>'+(runs.length?'<div class="evo-activity-list">'+runs.slice().sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,12).map(rr=>{const dt=new Date(rr.at),pc=Math.round(Number(rr.ok||0)/Math.max(1,Number(rr.total||0))*100);return '<div class="evo-activity-row"><div><b>'+esc(rr.title||rr.type||ui('TREINO','TRAINING','ENTRENAMIENTO'))+'</b><span>'+dt.toLocaleDateString(state.lang==='en'?'en-US':state.lang==='es'?'es-ES':'pt-BR')+' · '+dt.toLocaleTimeString(state.lang==='en'?'en-US':state.lang==='es'?'es-ES':'pt-BR',{hour:'2-digit',minute:'2-digit'})+'</span></div><div class="evo-activity-score"><b>'+Number(rr.ok||0)+'/'+Number(rr.total||0)+'</b><span>'+pc+'% · '+(rr.status==='progress'?ui('EM ANDAMENTO','IN PROGRESS','EN CURSO'):ui('CONCLUÍDO','COMPLETED','COMPLETADO'))+'</span></div></div>'}).join('')+'</div>':'')+'</div>'
  +'<div class="section-label">'+ui('BANCO DE TREINOS · SPOTS DISPONÍVEIS','TRAINING BANK · AVAILABLE SPOTS','BANCO DE ENTRENAMIENTOS · SPOTS DISPONIBLES')+'</div>'+catalog;
  setTitle('home',ui('MINHA EVOLUÇÃO','MY PROGRESS','MI EVOLUCIÓN'));syncScrollState(document)
 }
