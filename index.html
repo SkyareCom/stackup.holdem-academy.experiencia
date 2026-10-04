@@ -455,6 +455,66 @@ button{appearance:none;border:none;outline:none;background:none;}
 .perf-metric>span{display:block!important;font:600 10px/1.15 'Saira Semi Condensed','Saira',sans-serif!important;color:rgba(247,247,241,.84)!important;letter-spacing:.35px!important}
 .perf-metric>small{display:block!important;margin-top:4px!important;font:400 8px/1.15 'Saira Semi Condensed','Saira',sans-serif!important;color:rgba(247,247,241,.43)!important;letter-spacing:.28px!important}
 </style>
+<style id="global-rhythm-audit-v1">
+:root{
+ --sp-1:4px;--sp-2:8px;--sp-3:10px;--sp-4:12px;--sp-5:14px;--sp-6:16px;
+ --card-r:14px;--card-py:12px;--card-px:14px;--control-h:40px;
+ --lh-tight:1.15;--lh-body:1.42
+}
+.internal-content{padding-top:10px!important;line-height:var(--lh-body)!important}
+.internal-content>.section-label{margin:0 0 var(--sp-3)!important}
+.ref-grid,.plan-grid,.apps-grid,.evo-catalog{gap:var(--sp-3)!important}
+.ref-card{height:82px!important;min-height:82px!important;max-height:82px!important;padding:10px var(--card-px)!important;column-gap:12px!important;row-gap:2px!important}
+.ref-card b,.ref-card small{margin:0!important}
+.content-view,.lesson{gap:var(--sp-3)!important}
+.lesson{line-height:var(--lh-body)!important}
+.lesson>*,.lesson .lc,.lesson .rrow,.lesson .qcard{margin:0!important;padding:var(--card-py) var(--card-px)!important;border-radius:var(--card-r)!important}
+.lesson h1,.lesson h2,.lesson h3,.lesson h4{margin:0 0 var(--sp-2)!important;line-height:var(--lh-tight)!important}
+.lesson p,.lesson li,.lesson span{line-height:var(--lh-body)!important}
+.lesson p{margin:0!important}.lesson p+p{margin-top:var(--sp-2)!important}
+.lesson ul,.lesson ol{margin:var(--sp-2) 0 0!important;padding-left:18px!important}
+.lesson li+li{margin-top:var(--sp-1)!important}
+.lesson .lg,.lesson .ranking{gap:var(--sp-3)!important}
+.lesson .cg{gap:7px!important}
+.lesson .ch{gap:var(--sp-3)!important;padding:7px 0!important}
+.lesson .compare .ci+.ci{margin-top:24px!important}
+.lesson .compare .ci>strong{margin:0 0 var(--sp-2)!important}
+.quiz-box,.sim-box,.profile-box,.metric-box,.evo-panel,.plan-card,.app-card{
+ box-sizing:border-box!important;border-radius:var(--card-r)!important
+}
+.quiz-box,.sim-box,.profile-box,.metric-box{padding:var(--card-py) var(--card-px)!important;margin:0 0 var(--sp-3)!important}
+.evo-panel{padding:var(--card-py) var(--card-px)!important;margin-top:var(--sp-3)!important}
+.evo-panel>strong{margin:0 0 var(--sp-3)!important;line-height:var(--lh-tight)!important}
+.metric-row,.evo-grid,.evo-grid2,.perf-grid{gap:var(--sp-3)!important}
+.evo-bars,.evo-catalog{gap:var(--sp-2)!important}
+.evo-row{gap:var(--sp-2)!important}
+.profile-section-title{margin:var(--sp-5) 0 var(--sp-2)!important}
+.plan-card,.app-card{padding:var(--card-py) var(--card-px)!important}
+.plan-desc,.app-desc{margin-top:7px!important;line-height:var(--lh-body)!important}
+.plan-meta{margin-top:7px!important;line-height:1.25!important}
+.app-actions{gap:var(--sp-2)!important;margin-top:var(--sp-3)!important}
+.page-actions{gap:var(--sp-3)!important;margin:0 0 var(--sp-3)!important}
+.page-action{height:var(--control-h)!important;min-height:var(--control-h)!important}
+.content-next{height:44px!important;min-height:44px!important;margin:var(--sp-3) 0 0!important}
+.quiz-progress{margin-bottom:var(--sp-3)!important}
+.quiz-prompt{margin:var(--sp-3) 0!important;line-height:var(--lh-body)!important}
+.quiz-option{min-height:42px!important;margin:0 0 var(--sp-2)!important;line-height:1.25!important}
+.quiz-analysis{margin-top:var(--sp-3)!important;line-height:var(--lh-body)!important}
+.quiz-nav{display:grid!important;grid-template-columns:1fr 1fr!important;gap:var(--sp-3)!important;margin-top:var(--sp-3)!important}
+.quiz-nav button{height:42px!important;min-height:42px!important}
+.evo-activity-list{margin-top:var(--sp-4)!important}
+.evo-activity-row{gap:var(--sp-4)!important;padding:var(--sp-3) 0!important}
+.evo-activity-row>div{gap:2px!important}
+.perf-metric{min-height:92px!important;padding:var(--sp-5) var(--sp-4) var(--sp-4)!important}
+.perf-metric>b{margin:0 0 5px!important}.perf-metric>small{margin-top:var(--sp-1)!important}
+.rank-duel{align-items:center!important}
+.internal-nav button{line-height:1!important}
+@media(max-width:360px){
+ .internal-page{padding-left:12px!important;padding-right:12px!important}
+ .ref-card{padding-left:12px!important;padding-right:12px!important}
+ .perf-metric{padding:12px 10px!important}
+}
+</style>
 </head>
 <body>
 <main class="app">
@@ -553,7 +613,7 @@ const el=k=>document.querySelector('.internal-page[data-page="'+k+'"] .internal-
 const roots={base:D.FUND||[],modalidades:D.MOD||[],pratica:D.PRAT||[]};
 const SPOT_MIN=300;
 function spotClone(q,nodeId,i){
- const base=JSON.parse(JSON.stringify(q)),serial=String(i+1).padStart(3,'0');
+ const base={...q},serial=String(i+1).padStart(3,'0');
  base.id=String(nodeId||'SPOT').toUpperCase()+'-U'+serial;
  const lead=ui('CENÁRIO '+serial,'SCENARIO '+serial,'ESCENARIO '+serial);
  base.prompt=lead+' · '+String(q.prompt||'');
@@ -578,7 +638,7 @@ Object.values(roots).forEach(expandQuizBank);
 if(Array.isArray(D.SIMB)&&D.SIMB.length){
  const originals=D.SIMB.slice(),out=[],seen=new Set();
  for(let i=0;i<SPOT_MIN;i++){
-  const q=JSON.parse(JSON.stringify(originals[i%originals.length])),serial=String(i+1).padStart(3,'0');
+  const q={...originals[i%originals.length]},serial=String(i+1).padStart(3,'0');
   q.id='SIM-U'+serial;
   q.question=ui('CENÁRIO '+serial,'SCENARIO '+serial,'ESCENARIO '+serial)+' · '+String(q.question||'');
   const key=q.id+'|'+q.question;
@@ -643,7 +703,7 @@ function spotTable(q){
  return '<div class="quiz-table-memory spot-table" aria-label="'+ui('Mesa do spot','Spot table','Mesa del spot')+'"><div class="qtm-felt"></div>'+seatHtml+board+(hero?'<div class="qtm-hero">'+hero+'</div>':'')+'</div>'
 }
 function showSimulator(k){const bank=D.SIMB||[];const q=bank[state.sim%bank.length],c=el(k);if(!q){c.innerHTML=navMarkup(k)+'<div class="empty-note">'+ui('Banco do simulador indisponível.','Simulator bank unavailable.','Banco del simulador no disponible.')+'</div>';return}setTitle(k,ui('SIMULADOR','SIMULATOR','SIMULADOR'));const cards=(q.heroCards||'').split(/\s+/).filter(Boolean).map(x=>'<span class="sim-card">'+esc(x)+'</span>').join('');const board=(q.board||'').split(/\s+/).filter(Boolean).map(x=>'<span class="sim-card">'+esc(x)+'</span>').join('');c.innerHTML=navMarkup(k,true)+'<div class="sim-box"><div class="section-label">'+esc(q.game)+' · '+esc(q.street||q.phase||'')+'</div><div>'+esc(q.context||'')+'</div>'+spotTable(q)+'<div class="quiz-prompt">'+esc(q.question)+'</div>'+(q.options||[]).map(o=>'<button class="quiz-option" data-sim-answer="'+esc(o)+'">'+esc(o)+'</button>').join('')+'<div class="quiz-analysis" id="sim-analysis"></div><div class="quiz-nav"><button data-sim-prev '+(state.sim===0?'disabled':'')+'>'+ui('‹ ANTERIOR','‹ PREVIOUS','‹ ANTERIOR')+'</button><button data-sim-next disabled>'+ui('PRÓXIMO ›','NEXT ›','SIGUIENTE ›')+'</button></div></div>'}
-function simAnswer(btn,val){const q=(D.SIMB||[])[state.sim%(D.SIMB||[]).length],ok=val===q.answer,p=progress();p.answers++;if(ok)p.ok++;p.runs.push({type:'sim',title:q.game,ok:ok?1:0,total:1,at:Date.now()});saveProgress(p);btn.parentElement.querySelectorAll('.quiz-option').forEach(b=>{if(b.dataset.simAnswer===String(q.answer))b.classList.add('ok');else if(b===btn&&!ok)b.classList.add('bad');b.disabled=true});document.getElementById('sim-analysis').innerHTML='<b>'+(ok?'CORRETO':'AJUSTAR')+'</b><br>'+esc(q.why||'');const next=btn.parentElement.querySelector('[data-sim-next]');if(next)next.disabled=false}
+function simAnswer(btn,val){const q=(D.SIMB||[])[state.sim%(D.SIMB||[]).length],ok=val===q.answer,p=progress();p.answers++;if(ok)p.ok++;p.runs.push({type:'sim',title:q.game,ok:ok?1:0,total:1,at:Date.now()});saveProgress(p);btn.parentElement.querySelectorAll('.quiz-option').forEach(b=>{if(b.dataset.simAnswer===String(q.answer))b.classList.add('ok');else if(b===btn&&!ok)b.classList.add('bad');b.disabled=true});document.getElementById('sim-analysis').innerHTML='<b>'+ui(ok?'CORRETO':'AJUSTAR',ok?'CORRECT':'REVIEW',ok?'CORRECTO':'AJUSTAR')+'</b><br>'+esc(q.why||'');const next=btn.parentElement.querySelector('[data-sim-next]');if(next)next.disabled=false}
 function renderHome(){const c=el('home');c.innerHTML=navMarkup('home')+'<div class="ref-grid">'+home.map(x=>card(x[0],tx(x[1]),tx(x[2]),x[3])).join('')+'</div>';setTitle('home','HOME')}
 function ui(pt,en,es){return ({pt,en,es})[state.lang]||pt}
 function renderProfile(){
