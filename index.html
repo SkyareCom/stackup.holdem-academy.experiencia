@@ -348,15 +348,17 @@ function showNode(k,n){state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n
 function progress(){try{return JSON.parse(localStorage.getItem('academy.experience.progress')||'{"answers":0,"ok":0,"runs":[]}')}catch(e){return {answers:0,ok:0,runs:[]}}}
 function saveProgress(p){localStorage.setItem('academy.experience.progress',JSON.stringify(p))}
 function startQuiz(k,n){const qs=n.quiz||[];state.quiz={k,n,qs,i:0,ok:0,answered:false};renderQuiz()}
+/* REGRA GLOBAL: todo treino/quiz/simulado relacionado a cartas, distribuição, board, streets, posições, blinds, assentos ou ordem de ação deve renderizar mesa. */
 function trainingTable(qz,q){
- const title=tx(qz.n.t).toLowerCase(),prompt=String(q.prompt||'').toLowerCase(),id=String(qz.n.id||'').toLowerCase();
- const pos=/posi|position|utg|button|btn|blind|cutoff|hijack|lojack|\bco\b|\bsb\b|\bbb\b/.test(title+' '+prompt+' '+id);
- const cards=/carta|card|flop|turn|river|board|street|mão|hand|community|comunit|naipe|suit|poker/.test(title+' '+prompt+' '+id);
+ const title=tx(qz.n.t).toLowerCase(),prompt=String(q.prompt||'').toLowerCase(),analysis=String(q.analysis||'').toLowerCase(),opts=(q.options||q.items||[]).join(' ').toLowerCase(),id=String(qz.n.id||'').toLowerCase();
+ const hay=[title,prompt,analysis,opts,id].join(' ');
+ const pos=/posi|position|utg|button|btn|blind|cutoff|hijack|lojack|dealer|crupi|assento|seat|ordem de ação|action order|orden de acción|\\bco\\b|\\bsb\\b|\\bbb\\b/.test(hay);
+ const cards=/carta|card|cartas|cards|flop|turn|river|board|street|mão|hand|hole|community|comunit|naipe|suit|deck|baralho|distribui|deal|draw|stud|omaha|hold.?em|showdown|kicker|par|pair|flush|straight|quadra|full house|royal/.test(hay);
  if(!pos&&!cards)return '';
  const seats=[['u1','UTG1'],['u2','UTG2'],['m1','MP1'],['m2','MP2'],['lj','LJ'],['hj','HJ'],['co','CO'],['btn','BTN'],['sb','SB'],['bb','BB']];
- let active='';for(const s of seats){if(new RegExp('(^|\\W)'+s[1].toLowerCase()+'(\\W|$)','i').test(prompt)){active=s[1];break}}
- let n=0;if(/river/.test(prompt))n=5;else if(/turn/.test(prompt))n=4;else if(/flop/.test(prompt))n=3;
- const seatHtml=pos?seats.map(s=>'<span class="qtm-seat qtm-'+s[0]+(active===s[1]?' a':'')+'">'+s[1]+'</span>').join(''):'';
+ let active='';for(const s of seats){if(new RegExp('(^|\\W)'+s[1].toLowerCase()+'(\\W|$)','i').test(hay)){active=s[1];break}}
+ let n=0;if(/river/.test(hay))n=5;else if(/turn/.test(hay))n=4;else if(/flop/.test(hay))n=3;
+ const seatHtml=seats.map(s=>'<span class="qtm-seat qtm-'+s[0]+(active===s[1]?' a':'')+'">'+s[1]+'</span>').join('');
  const board=cards?'<div class="qtm-board">'+[0,1,2,3,4].map(i=>'<span class="qtm-card '+(i<n?'on':'')+'">'+(i<n?'●':'?')+'</span>').join('')+'</div>':'';
  return '<div class="quiz-table-memory" aria-label="'+ui('Mesa de apoio visual para memorização','Visual poker table for memorization','Mesa visual de apoyo para memorización')+'"><div class="qtm-felt"></div>'+seatHtml+board+'</div>'
 }
