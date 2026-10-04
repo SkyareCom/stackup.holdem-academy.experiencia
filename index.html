@@ -311,29 +311,12 @@ button{appearance:none;border:none;outline:none;background:none;}
 </style>
 </style>
 </style>
-<style id="lesson-topic-blocks-v3">
-.lesson .lesson-topic{
-  display:block!important;
-  margin:0!important;
-  padding:0!important;
-  border:0!important;
-  background:transparent!important;
-  box-shadow:none!important;
-}
-.lesson .lesson-topic + .lesson-topic{margin-top:18px!important}
-.lesson .lesson-topic > strong,
-.lesson .lesson-topic > b,
-.lesson .lesson-topic > h3,
-.lesson .lesson-topic > h4{
-  display:block!important;
-  margin:0 0 8px!important;
-  padding:0!important;
-}
-.lesson .lesson-topic > p{
-  display:block!important;
-  margin:0!important;
-  padding:0!important;
-}
+</style>
+<style id="compare-topic-spacing">
+.lesson .compare .ci{display:block!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.lesson .compare .ci+.ci{margin-top:24px!important}
+.lesson .compare .ci>strong{display:block!important;margin:0 0 8px!important;padding:0!important}
+.lesson .compare .ci>p{display:block!important;margin:0!important;padding:0!important}
 </style>
 </head>
 <body>
@@ -447,9 +430,8 @@ function setTitle(k,t){const page=document.querySelector('.internal-page[data-pa
 function list(k,nodes,title){const c=el(k);if(!c)return;c.innerHTML=navMarkup(k)+'<div class="ref-grid">'+nodes.map(n=>card(n.id,tx(n.t),tx(n.d),icon(n))).join('')+'</div>';setTitle(k,title||k.toUpperCase())}
 function renderRoot(k){state.trail[k]=[];const nodes=k==='pratica'?[...(roots[k]||[]),{id:'evolucao',t:{pt:'Minha evolução',en:'My progress',es:'Mi evolución'},d:{pt:'Desempenho e progresso pessoal.',en:'Performance and personal progress.',es:'Rendimiento y progreso personal.'},ic:'p_evolucao'},{id:'historico',t:{pt:'Histórico',en:'History',es:'Historial'},d:{pt:'Registro dos treinos realizados.',en:'Training history.',es:'Historial de entrenamientos.'},ic:'p_historico'}]:(roots[k]||[]);list(k,nodes,k==='modalidades'?ui('MODALIDADES','GAME TYPES','MODALIDADES'):k==='pratica'?ui('PRÁTICA','PRACTICE','PRÁCTICA'):ui('BASE','BASE','BASE'))}
 function findNode(k,id,nodes=roots[k]||[]){for(const n of nodes){if(n.id===id)return n;if(n.sub){const q=findNode(k,id,n.sub);if(q)return q}}return null}
-function normalizeLessonTopics(html){if(!html)return '';const box=document.createElement('div');box.innerHTML=html;const containers=[box,...box.querySelectorAll('.lc')];containers.forEach(parent=>{const kids=[...parent.children];let current=null;kids.forEach(node=>{if(/^(STRONG|B|H3|H4)$/.test(node.tagName)){current=document.createElement('div');current.className='lesson-topic';parent.insertBefore(current,node);current.appendChild(node)}else if(current&&node.tagName==='P'){current.appendChild(node);current=null}})});return box.innerHTML}
 function showNode(k,n){state.trail[k].push(n.id);setTitle(k,tx(n.t));if(n.sub&&n.sub.length){list(k,n.sub,tx(n.t));return}
- const c=el(k),lead=n.lead?'<p class="lesson-lead">'+esc(tx(n.lead))+'</p>':'',body=n.html?'<div class="lesson">'+normalizeLessonTopics(n.html)+'</div>':'';
+ const c=el(k),lead=n.lead?'<p class="lesson-lead">'+esc(tx(n.lead))+'</p>':'',body=n.html?'<div class="lesson">'+n.html+'</div>':'';
  if(n.sim){showSimulator(k);return}
  if(!n.html&&n.quiz){startQuiz(k,n);return}
  c.innerHTML=navMarkup(k,true)+'<div class="content-view">'+lead+body+(n.quiz?'<button class="content-next" data-train="'+esc(n.id)+'">TREINAR ESTE TEMA ›</button>':'')+'</div>'}
