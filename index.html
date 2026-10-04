@@ -72,14 +72,22 @@ button{appearance:none;border:none;outline:none;background:none;}
 .internal-head{display:flex;align-items:center;gap:10px}
 .internal-logo{width:50px;height:50px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.34))}
 .internal-title{display:inline-flex;align-items:center;min-height:34px;padding:7px 14px;border:1px solid var(--line2);border-radius:18px;background:rgba(8,20,13,.34);font:700 12px/1 'Saira',sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#f2efe8}
-.internal-content{height:calc(100% - 64px)}
-.internal-engine{width:100%;height:100%;border:0;background:transparent;display:block}
+.internal-content{height:calc(100% - 64px);padding-top:12px;overflow-y:auto;scrollbar-width:none;font-family:'Saira Semi Condensed','Saira',sans-serif;font-size:12px}
+.internal-content::-webkit-scrollbar{display:none}
+.internal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:18px}
+.internal-card{min-height:132px;padding:14px 12px;border-radius:18px;border:1px solid rgba(97,255,152,.15);background:linear-gradient(180deg,rgba(9,22,15,.64),rgba(7,17,12,.70));color:#f7f7f1;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.internal-card b{font:600 12px/1.15 'Saira Semi Condensed','Saira',sans-serif;text-transform:uppercase;color:#2adc62}
+.internal-card small{font:400 12px/1.25 'Saira Semi Condensed','Saira',sans-serif;color:rgba(247,247,241,.72)}
+.internal-detail{padding-bottom:20px;font:400 12px/1.45 'Saira Semi Condensed','Saira',sans-serif;color:rgba(247,247,241,.78)}
+.internal-detail h3{font:600 12px/1.2 'Saira Semi Condensed','Saira',sans-serif;color:#2adc62;text-transform:uppercase}
+.internal-back{margin-bottom:10px;padding:8px 12px;border:1px solid rgba(97,255,152,.15);border-radius:14px;color:#f7f7f1;font:600 12px 'Saira Semi Condensed','Saira',sans-serif}
 .internal-nav{position:absolute;left:0;right:0;bottom:0;z-index:3;height:66px;padding:0 8px max(4px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);align-items:center;background:rgba(2,8,5,.86);border-top:1px solid rgba(97,255,152,.15);backdrop-filter:blur(10px)}
 .internal-nav button{height:52px;padding:4px 2px 2px;color:rgba(247,247,241,.48);font:600 10px/1 'Saira',sans-serif;text-transform:uppercase;letter-spacing:.02em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
 .internal-nav button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .internal-nav button.active{color:#2adc62}
 .internal-nav button.active::after{display:none!important}
 </style>
+<script src="academy-data.js"></script>
 </head>
 <body>
 <main class="app">
@@ -124,7 +132,6 @@ button{appearance:none;border:none;outline:none;background:none;}
   <section class="internal-page" data-page="modalidades"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">MODALIDADES</div></header><div class="internal-content"></div></section>
   <section class="internal-page" data-page="pratica"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PRÁTICA</div></header><div class="internal-content"></div></section>
   <section class="internal-page" data-page="perfil"><header class="internal-head"><img class="internal-logo" alt="StackUp Hold'em"><div class="internal-title">PERFIL</div></header><div class="internal-content"></div></section>
-  <iframe id="internal-engine" class="internal-engine" src="academy-app.html" title="Academy" style="position:absolute;z-index:2;left:16px;right:16px;top:78px;width:calc(100% - 32px);height:calc(100% - 144px)"></iframe>
   <nav class="internal-nav" aria-label="Navegação principal">
     <button class="active" data-page-target="home"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M9.5 20v-6h5v6"/></svg><span>HOME</span></button><button data-page-target="base"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg><span>BASE</span></button><button data-page-target="modalidades"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="16" rx="2"/><path d="m8 8 2-2 2 2-2 2z"/><path d="M19 7v12a2 2 0 0 1-2 2H8"/></svg><span>MODALIDADES</span></button><button data-page-target="pratica"><svg viewBox="0 0 24 24"><path d="M12 3v4"/><path d="M5.6 5.6 8.4 8.4"/><path d="M3 12h4"/><circle cx="13" cy="13" r="6"/><path d="m10.5 13 1.7 1.7 3.3-3.4"/></svg><span>PRÁTICA</span></button><button data-page-target="perfil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><span>PERFIL</span></button>
   </nav>
@@ -165,7 +172,20 @@ button{appearance:none;border:none;outline:none;background:none;}
 </script>
 
 <script id="experience-internal-navigation">
-(()=>{const shell=document.getElementById('internal-shell');const open=()=>{shell.classList.add('active');document.querySelectorAll('.internal-bg').forEach(el=>el.style.backgroundImage='url('+window.ACADEMY_BG+')');document.querySelectorAll('.internal-logo').forEach(el=>el.src=window.ACADEMY_LOGO)};document.querySelectorAll('[data-page-target]').forEach(btn=>btn.addEventListener('click',()=>{const p=btn.dataset.pageTarget;document.querySelectorAll('.internal-page').forEach(el=>el.classList.toggle('active',el.dataset.page===p));document.querySelectorAll('[data-page-target]').forEach(el=>el.classList.toggle('active',el===btn));const map={home:'home',base:'fund',modalidades:'mod',pratica:'prat',perfil:'perfil'};document.getElementById('internal-engine')?.contentWindow?.postMessage({type:'experience-view',view:map[p]},'*')}));document.getElementById('bio-enter').addEventListener('click',()=>setTimeout(open,0));window.openAcademyHome=open})();
+(()=>{const shell=document.getElementById('internal-shell');const open=()=>{shell.classList.add('active');document.querySelectorAll('.internal-bg').forEach(el=>el.style.backgroundImage='url('+window.ACADEMY_BG+')');document.querySelectorAll('.internal-logo').forEach(el=>el.src=window.ACADEMY_LOGO)};document.querySelectorAll('[data-page-target]').forEach(btn=>btn.addEventListener('click',()=>{const p=btn.dataset.pageTarget;document.querySelectorAll('.internal-page').forEach(el=>el.classList.toggle('active',el.dataset.page===p));document.querySelectorAll('[data-page-target]').forEach(el=>el.classList.toggle('active',el===btn));renderExperienceSection(p)}));document.getElementById('bio-enter').addEventListener('click',()=>setTimeout(open,0));window.openAcademyHome=()=>{open();renderExperienceSection('home')};setTimeout(()=>renderExperienceSection('home'),0)})();
+</script>
+
+<script id="experience-native-content">
+(()=>{const D=window.EXPERIENCE_ACADEMY_DATA||{};const pageEl=k=>document.querySelector('.internal-page[data-page="'+k+'"] .internal-content');const txt=x=>x&&typeof x==='object'?(x.pt||x.en||x.es||''):(x||'');const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function card(n,section){return '<button class="internal-card" data-native-open="'+section+'" data-native-id="'+esc(n.id)+'"><b>'+esc(txt(n.t))+'</b><small>'+esc(txt(n.d)||n.lead||'')+'</small></button>'}
+function list(section,arr){return '<div class="internal-grid">'+(arr||[]).map(n=>card(n,section)).join('')+'</div>'}
+function home(){return '<div class="internal-grid">'+[
+ ['base','BASE','Fundamentos, conceitos e regras essenciais.'],['modalidades','MODALIDADES','Conheça e treine as principais modalidades.'],['pratica','PRÁTICA','Simulador, quiz, matemática e histórico.'],['perfil','PERFIL','Preferências, evolução, planos e conta.']
+].map(x=>'<button class="internal-card" data-home-go="'+x[0]+'"><b>'+x[1]+'</b><small>'+x[2]+'</small></button>').join('')+'</div>'}
+function profile(){return '<div class="internal-grid"><div class="internal-card"><b>MINHA EVOLUÇÃO</b><small>Acompanhe seu progresso e desempenho.</small></div><div class="internal-card"><b>IDIOMA</b><small>PT-BR · EN-US · ES-ES</small></div><div class="internal-card"><b>PLANOS</b><small>Consulte os planos do Academy.</small></div><div class="internal-card"><b>OUTROS APPS</b><small>Conheça o ecossistema StackUp Hold’em.</small></div></div>'}
+window.renderExperienceSection=k=>{const el=pageEl(k);if(!el)return;if(k==='home')el.innerHTML=home();else if(k==='base')el.innerHTML=list('base',D.FUND);else if(k==='modalidades')el.innerHTML=list('modalidades',D.MOD);else if(k==='pratica')el.innerHTML=list('pratica',D.PRAT);else if(k==='perfil')el.innerHTML=profile()};
+document.addEventListener('click',e=>{const hg=e.target.closest('[data-home-go]');if(hg){document.querySelector('[data-page-target="'+hg.dataset.homeGo+'"]')?.click();return}const b=e.target.closest('[data-native-open]');if(!b)return;const map={base:D.FUND,modalidades:D.MOD,pratica:D.PRAT};const n=(map[b.dataset.nativeOpen]||[]).find(x=>x.id===b.dataset.nativeId);if(!n)return;const el=pageEl(b.dataset.nativeOpen);let body=n.html||'';if(n.sim)body='<p>'+esc(n.lead||'Simulador')+'</p><p>Estrutura do simulador migrada. O treino será aberto neste mesmo front.</p>';else if(n.quiz)body='<p>'+esc(n.lead||'Quiz')+'</p><p>'+n.quiz.length+' questões disponíveis nesta seção.</p>';el.innerHTML='<button class="internal-back" data-native-back="'+b.dataset.nativeOpen+'">‹ VOLTAR</button><div class="internal-detail"><h3>'+esc(txt(n.t))+'</h3>'+body+'</div>'});document.addEventListener('click',e=>{const b=e.target.closest('[data-native-back]');if(b)renderExperienceSection(b.dataset.nativeBack)});
+})();
 </script>
 </body>
 <!-- re-uploaded approved front -->
