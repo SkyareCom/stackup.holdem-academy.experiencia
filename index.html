@@ -438,6 +438,31 @@ button{appearance:none;border:none;outline:none;background:none;}
   text-shadow:0 2px 8px rgba(0,0,0,.32)!important;
 }
 </style>
+</style>
+<style id="evolution-heatmap-fix">
+.evo-heat{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  gap:7px!important;
+  margin:14px 0 10px!important;
+  width:100%!important;
+}
+.evo-day{
+  aspect-ratio:1.45/1!important;
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid rgba(97,255,152,.16)!important;
+  border-radius:7px!important;
+  background:rgba(3,18,10,.52)!important;
+  color:rgba(247,247,241,.48)!important;
+  font:600 10px/1 'Saira Semi Condensed','Saira',sans-serif!important;
+}
+.evo-day.l1{background:rgba(42,220,98,.18)!important;color:rgba(247,247,241,.78)!important;border-color:rgba(97,255,152,.28)!important}
+.evo-day.l2{background:rgba(42,220,98,.34)!important;color:#f7f7f1!important;border-color:rgba(97,255,152,.42)!important}
+.evo-day.l3{background:rgba(42,220,98,.58)!important;color:#fff!important;border-color:rgba(97,255,152,.62)!important}
+</style>
 </head>
 <body>
 <main class="app">
