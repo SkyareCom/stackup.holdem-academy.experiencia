@@ -252,6 +252,21 @@ button{appearance:none;border:none;outline:none;background:none;}
 .lesson .s-co,.qtm-co{left:74%!important;top:88%!important}
 .lesson .dbtn{left:57%!important;top:80%!important}
 </style>
+<style id="editorial-reading-system">
+/* Hierarquia editorial para conteúdo longo */
+.lesson .lc{position:relative;overflow:hidden}
+.lesson .lc:before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(57,223,111,.72),rgba(57,223,111,0))}
+.lesson .lc h3{display:flex!important;align-items:center!important;gap:8px!important;color:#f5f7f4!important;font-weight:600!important;letter-spacing:.035em!important}
+.lesson .lc h3:before{content:'';width:5px;height:5px;border-radius:50%;background:#39df6f;box-shadow:0 0 10px rgba(57,223,111,.55);flex:0 0 auto}
+.lesson .lc>p:not(.tip){color:rgba(245,247,244,.72)!important;line-height:1.48!important}
+.lesson .lc .ex{display:block!important;margin:10px 0 0!important;padding:10px 12px!important;border-left:2px solid #39df6f!important;border-radius:0 9px 9px 0!important;background:linear-gradient(90deg,rgba(57,223,111,.12),rgba(57,223,111,.025))!important;color:#f4f7f4!important;font-weight:600!important;line-height:1.4!important;letter-spacing:.01em}
+.lesson .lc .ex:before{content:'◆  ';color:#39df6f;font-size:9px;font-weight:600;letter-spacing:.08em}
+.lesson .lc .tip{margin-top:8px!important;padding:8px 10px!important;border:1px dashed rgba(255,255,255,.12)!important;border-radius:9px!important;background:rgba(255,255,255,.025)!important;color:rgba(245,247,244,.62)!important;line-height:1.42!important}
+.lesson .lc .tip:before{content:'↳  ';color:rgba(57,223,111,.9);font-size:9px;font-weight:600;letter-spacing:.06em}
+.lesson-lead{font-weight:400!important;line-height:1.45!important}
+.lesson strong{color:#f5f7f4!important;font-weight:600!important}
+@media(max-width:420px){.lesson .lc .ex,.lesson .lc .tip{font-size:11px!important}}
+</style>
 </head>
 <body>
 <main class="app">
