@@ -125,6 +125,28 @@ button{appearance:none;border:none;outline:none;background:none;}
 .quiz-box,.sim-box,.profile-box,.metric-box{padding:12px 14px!important;border-radius:14px!important;margin-bottom:10px!important}
 .section-label{margin-bottom:10px!important}
 </style>
+<style id="smart-scroll-policy">
+/* Scroll somente quando houver overflow real. */
+.internal-content{
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:contain!important;
+  scrollbar-gutter:auto!important;
+}
+/* elimina folgas artificiais que criavam micro-scroll */
+.internal-content>.page-actions:first-child{margin-top:0!important}
+.internal-content>:last-child{margin-bottom:0!important}
+.ref-grid:last-child,.content-view:last-child,.lesson:last-child{margin-bottom:0!important}
+.ref-grid{padding-bottom:12px!important}
+.content-view{padding-bottom:12px!important}
+.lesson{padding-bottom:12px!important}
+/* páginas curtas ficam estáveis; JS desativa overflow quando tudo cabe */
+.internal-content.no-scroll{
+  overflow-y:hidden!important;
+  overscroll-behavior-y:none!important;
+  touch-action:pan-x!important;
+}
+</style>
 <style id="approved-internal-type">
 @import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600&display=swap');
 .internal-shell,.internal-shell *{font-family:'Saira Semi Condensed',sans-serif!important;font-size:12px;font-weight:400}
@@ -279,7 +301,21 @@ function renderProfile(){const p=progress(),pct=Math.round(p.ok/Math.max(1,p.ans
 function renderStats(){const p=progress(),pct=Math.round(p.ok/Math.max(1,p.answers)*100),c=el('home');c.innerHTML=navMarkup('home')+'<div class="metric-row"><div class="metric-box"><b>'+p.answers+'</b>RESPOSTAS</div><div class="metric-box"><b>'+p.ok+'</b>ACERTOS</div><div class="metric-box"><b>'+pct+'%</b>PRECISÃO</div></div><div class="profile-box"><b>MINHA EVOLUÇÃO</b><span>Os indicadores são atualizados conforme os treinos realizados neste front.</span></div>';setTitle('home','MINHA EVOLUÇÃO')}
 function renderHistory(){const p=progress(),c=el('home');c.innerHTML=navMarkup('home')+'<div class="section-label">HISTÓRICO DE TREINOS</div>'+(p.runs.length?p.runs.slice().reverse().map(r=>'<div class="profile-box"><b>'+esc(r.title)+'</b><span>'+r.ok+'/'+r.total+' · '+new Date(r.at).toLocaleString('pt-BR')+'</span></div>').join(''):'<div class="empty-note">Nenhum treino realizado ainda.</div>');setTitle('home','HISTÓRICO')}
 function goPage(k){document.querySelector('[data-page-target="'+k+'"]')?.click();if(k==='perfil')renderProfile();else if(roots[k])renderRoot(k)}
-renderHome();['base','modalidades','pratica'].forEach(renderRoot);renderProfile();
+function syncScrollState(scope=document){
+  requestAnimationFrame(()=>{
+    scope.querySelectorAll?.('.internal-content').forEach(box=>{
+      box.classList.remove('no-scroll');
+      const needs=box.scrollHeight>box.clientHeight+2;
+      box.classList.toggle('no-scroll',!needs);
+      if(!needs)box.scrollTop=0;
+    });
+  });
+}
+const scrollObserver=new ResizeObserver(()=>syncScrollState(document));
+document.querySelectorAll('.internal-content').forEach(box=>scrollObserver.observe(box));
+const scrollMutation=new MutationObserver(()=>syncScrollState(document));
+document.querySelectorAll('.internal-content').forEach(box=>scrollMutation.observe(box,{childList:true,subtree:true,characterData:true}));
+renderHome();['base','modalidades','pratica'].forEach(renderRoot);renderProfile();syncScrollState(document);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-ref]');if(b){const p=b.closest('.internal-page')?.dataset.page,id=b.dataset.ref;if(p==='home'){if(['base','modalidades','pratica','perfil'].includes(id))goPage(id);else if(id==='evolucao')renderStats();else if(id==='historico')renderHistory();return}if(p==='pratica'&&id==='evolucao'){renderStats();goPage('home');return}if(p==='pratica'&&id==='historico'){renderHistory();goPage('home');return}const n=findNode(p,id);if(n)showNode(p,n);return}
  const tr=e.target.closest('[data-train]');if(tr){const p=tr.closest('.internal-page').dataset.page,n=findNode(p,tr.dataset.train);if(n)startQuiz(p,n);return}
  const a=e.target.closest('[data-answer]');if(a)return answer(a,a.dataset.answer);const sa=e.target.closest('[data-sim-answer]');if(sa)return simAnswer(sa,sa.dataset.simAnswer);
