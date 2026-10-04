@@ -1,0 +1,14 @@
+# StackUp Hold'em Academy critical ownership
+* @SkyareCom
+
+# Production delivery and signing
+/.github/workflows/ @SkyareCom
+/android/ @SkyareCom
+
+# TWA/web production surface
+/index.html @SkyareCom
+/sw.js @SkyareCom
+/manifest.webmanifest @SkyareCom
+/privacy.html @SkyareCom
+/academy-loader.js @SkyareCom
+/academy-visual-system.js @SkyareCom
