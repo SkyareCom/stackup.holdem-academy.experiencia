@@ -292,8 +292,8 @@ preferencias:'<svg '+V+'><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="1
 plano:'<svg '+V+'><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>',
 apps:'<svg '+V+'><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>'
 };
-function apply(){document.querySelectorAll('.ref-card[data-ref]').forEach(c=>{const k=c.dataset.ref,box=c.querySelector('.ref-icon');if(box&&icons[k])box.innerHTML=icons[k]})}
-new MutationObserver(apply).observe(document.getElementById('internal-shell'),{subtree:true,childList:true});apply();
+function apply(){document.querySelectorAll('.ref-card[data-ref]').forEach(c=>{const k=c.dataset.ref,box=c.querySelector('.ref-icon');if(box&&icons[k]&&box.dataset.iconKey!==k){box.innerHTML=icons[k];box.dataset.iconKey=k}})}
+let iconScheduled=false;new MutationObserver(()=>{if(iconScheduled)return;iconScheduled=true;requestAnimationFrame(()=>{iconScheduled=false;apply()})}).observe(document.getElementById('internal-shell'),{subtree:true,childList:true});apply();
 })();
 </script>
 </body>
