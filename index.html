@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Academy Premium Functional v11</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Saira+Stencil+One&display=swap');
+:root{
+  --text:#f7f7f1;
+  --muted:rgba(247,247,241,.72);
+  --muted2:rgba(247,247,241,.54);
+  --line:rgba(97,255,152,.15);
+  --line2:rgba(97,255,152,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;background:#000;color:var(--text);font-family:'Saira',system-ui,sans-serif;}
+body{display:flex;justify-content:center;}
+.app{position:relative;width:min(100vw,430px);height:100svh;overflow:hidden;background:#000;}
+.bg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;}
+.overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(1,8,4,.12) 18%,rgba(1,8,4,.14) 52%,rgba(0,0,0,.30) 100%);}
+.ambient{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 57%, rgba(39,255,117,.10) 0%, rgba(39,255,117,0) 30%),radial-gradient(ellipse at 50% 77%, rgba(39,255,117,.05) 0%, rgba(39,255,117,0) 24%);}
+.screen{position:relative;z-index:1;height:100%;padding:10px 16px max(12px, env(safe-area-inset-bottom));display:grid;grid-template-rows:auto auto auto auto 1fr;gap:8px;align-items:start;}
+.logo-wrap{display:flex;justify-content:center;padding-top:2px;}
+.logo{width:min(43vw,172px);height:auto;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.34));}
+.brand{text-align:center;margin-top:4px;}
+.stackup{font-family:'Saira',sans-serif;font-size:clamp(18px,3.2svh,26px);font-weight:800;line-height:1.02;letter-spacing:.025em;text-transform:uppercase;color:#f6f6f0;text-shadow:0 2px 8px rgba(0,0,0,.55);}
+.academy{margin-top:-2px;font-family:'Saira Stencil One','Saira',sans-serif;font-size:clamp(54px,7.8svh,76px);line-height:.90;letter-spacing:.012em;text-transform:uppercase;color:rgba(42,220,98,.58);-webkit-text-stroke:1.15px rgba(14,18,14,.80);text-shadow:0 0 12px rgba(52,255,126,.18),0 0 24px rgba(52,255,126,.07),0 1px 0 rgba(0,0,0,.45);}
+.tagline-wrap{margin:2px auto 0;width:min(100%,338px);border-radius:18px;padding:8px 12px;border:1px solid var(--line2);background:rgba(8,20,13,.34);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);}
+.tagline{text-align:center;font-family:'Saira',sans-serif;font-size:clamp(11px,1.95svh,14px);font-weight:700;line-height:1.1;letter-spacing:.11em;text-transform:uppercase;color:#f2efe8;white-space:nowrap;}
+.lang-row{display:flex;justify-content:center;gap:10px;margin-top:2px;}
+button{appearance:none;border:none;outline:none;background:none;}
+.lang-btn{min-height:46px;padding:0 18px;border-radius:18px;background:rgba(8,20,13,.56);border:1px solid rgba(106,255,161,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);color:#ecebe5;font-family:'Saira',sans-serif;font-size:12px;font-weight:500;letter-spacing:.01em;white-space:nowrap;}
+.cards{display:flex;flex-direction:column;gap:9px;margin-top:6px;align-self:start;}
+.card{min-height:58px;display:grid;grid-template-columns:32px 1fr 14px;align-items:center;gap:10px;padding:10px 12px;border-radius:20px;background:linear-gradient(180deg, rgba(9,22,15,.64), rgba(7,17,12,.70));border:1px solid var(--line);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);text-align:left;}
+.icon-wrap{width:30px;height:30px;display:grid;place-items:center;color:rgba(245,245,239,.92);}
+.g-icon{width:28px;height:28px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.18);}
+.g-icon span{font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:1;background:conic-gradient(#4285F4 0 25%, #34A853 25% 50%, #FBBC05 50% 75%, #EA4335 75% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.icon-line{width:26px;height:26px;}
+.copy{min-width:0;text-align:left;}
+.title{font-family:'Saira',sans-serif;font-size:12px;font-weight:700;line-height:1.05;letter-spacing:.005em;color:#f5f5ef;text-transform:uppercase;}
+.subtitle{margin-top:3px;font-family:'Saira',sans-serif;font-size:12px;font-weight:500;line-height:1.06;color:var(--muted);}
+.status{font-weight:700;color:rgba(245,245,239,.78);text-transform:uppercase;white-space:nowrap;}
+.chev{font-family:'Saira',sans-serif;font-size:24px;line-height:1;color:rgba(245,245,239,.82);justify-self:end;}
+.disabled .chev{visibility:hidden;}
+.disabled .subtitle{color:var(--muted2);}
+#toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%) translateY(18px);background:rgba(5,12,8,.94);color:#f7f7f1;border:1px solid rgba(106,255,161,.20);border-radius:14px;padding:10px 14px;font:600 12px 'Saira',sans-serif;letter-spacing:.01em;opacity:0;pointer-events:none;transition:opacity .18s ease, transform .18s ease;z-index:20;max-width:84%;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.28);}
+#biometric-screen{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(1,8,4,.94);backdrop-filter:blur(4px);}
+.bio-card{width:100%;max-width:340px;border:1px solid rgba(106,255,161,.18);border-radius:22px;background:rgba(8,20,13,.90);padding:26px 20px;text-align:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);}
+.bio-title{font:700 18px 'Saira',sans-serif;color:#f5f5ef;}
+.bio-copy{margin-top:8px;font:500 13px/1.35 'Saira',sans-serif;color:rgba(247,247,241,.72);}
+.bio-btn{width:100%;min-height:46px;margin-top:18px;border-radius:14px;border:1px solid rgba(106,255,161,.22);background:rgba(16,37,24,.82);color:#f5f5ef;font:700 12px 'Saira',sans-serif;}
+.bio-back{width:100%;min-height:42px;margin-top:8px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(247,247,241,.72);font:600 12px 'Saira',sans-serif;}
+@media (max-width:360px){
+  .screen{padding-left:12px;padding-right:12px;}
+  .logo{width:min(45vw,164px);}
+  .academy{font-size:48px;}
+  .lang-row{gap:8px;}
+  .lang-btn{padding:0 14px;font-size:11px;}
+  .title,.subtitle{font-size:11px;}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="ambient"></div>
+  <div class="screen">
+    <div class="logo-wrap"><img class="logo" src="" alt="StackUp Hold'em logo"></div>
+    <section class="brand" aria-label="branding">
+      <div class="stackup">STACKUP HOLD'EM</div>
+      <div class="academy">ACADEMY</div>
+    </section>
+    <div class="tagline-wrap"><div class="tagline">POKER DO ZERO AO REAL GAME.</div></div>
+    <div class="lang-row" aria-label="languages">
+      <button class="lang-btn" type="button" data-lang="pt">PT-BR</button>
+      <button class="lang-btn" type="button" data-lang="en">EN-US</button>
+      <button class="lang-btn" type="button" data-lang="es">ES-ES</button>
+    </div>
+    <section class="cards" aria-label="login methods">
+      <button class="card disabled" type="button" data-action="google">
+        <div class="icon-wrap"><div class="g-icon"><span>G</span></div></div>
+        <div class="copy"><div class="title">ENTRAR COM GOOGLE</div><div class="subtitle">Continue com sua conta Google · <span class="status">INATIVO</span></div></div>
+        <div class="chev"></div>
+      </button>
+      <button class="card" type="button" data-action="biometria">
+        <div class="icon-wrap"><svg class="icon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg></div>
+        <div class="copy"><div class="title">ENTRAR COM BIOMETRIA</div><div class="subtitle">Use a biometria deste aparelho</div></div>
+        <div class="chev">›</div>
+      </button>
+      <button class="card disabled" type="button" data-action="stackup">
+        <div class="icon-wrap"><svg class="icon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 17.8A7.5 7.5 0 0 0 4.5 20.5"/><path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/><circle cx="19" cy="8" r="2.2"/><path d="M19 4.6v-2"/><path d="M19 11.4v-1.2"/><path d="M22.4 8H21.2"/><path d="M16.8 8H15.6"/></svg></div>
+        <div class="copy"><div class="title">ENTRAR COM STACKUP ID</div><div class="subtitle">Use seu e-mail e senha StackUp · <span class="status">INATIVO</span></div></div>
+        <div class="chev"></div>
+      </button>
+    </section>
+  </div>
+  <div id="toast" aria-live="polite"></div>
+  <section id="biometric-screen">
+    <div class="bio-card">
+      <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="#f5f5ef" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:14px;"><path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>
+      <div id="bio-title" class="bio-title">BIOMETRIA</div>
+      <div id="bio-copy" class="bio-copy">Simulação funcional do fluxo de biometria.</div>
+      <button id="bio-enter" class="bio-btn" type="button">ENTRAR</button>
+      <button id="bio-back" class="bio-back" type="button">VOLTAR</button>
+    </div>
+  </section>
+</main>
+<script src="assets/bg.js"></script>
+<script src="assets/logo.js"></script>
+<script>document.querySelector('.bg').style.backgroundImage='url('+window.ACADEMY_BG+')';document.querySelector('.logo').src=window.ACADEMY_LOGO;</script>
+<script>
+(() => {
+  const translations = {
+    pt: {tagline:'POKER DO ZERO AO REAL GAME.',googleTitle:'ENTRAR COM GOOGLE',googleSub:'Continue com sua conta Google · INATIVO',bioTitle:'ENTRAR COM BIOMETRIA',bioSub:'Use a biometria deste aparelho',stackTitle:'ENTRAR COM STACKUP ID',stackSub:'Use seu e-mail e senha StackUp · INATIVO',unavailable:'Recurso inativo nesta versão.',bioScreenTitle:'BIOMETRIA',bioScreenCopy:'Simulação funcional do fluxo de biometria.',enter:'ENTRAR',back:'VOLTAR',success:'Biometria validada. Entrada liberada.'},
+    en: {tagline:'POKER FROM ZERO TO REAL GAME.',googleTitle:'CONTINUE WITH GOOGLE',googleSub:'Continue with your Google account · INACTIVE',bioTitle:'CONTINUE WITH BIOMETRICS',bioSub:'Use this device biometrics',stackTitle:'CONTINUE WITH STACKUP ID',stackSub:'Use your StackUp email and password · INACTIVE',unavailable:'Feature inactive in this version.',bioScreenTitle:'BIOMETRICS',bioScreenCopy:'Functional simulation of the biometric flow.',enter:'ENTER',back:'BACK',success:'Biometrics validated. Access granted.'},
+    es: {tagline:'POKER DESDE CERO HASTA EL JUEGO REAL.',googleTitle:'ENTRAR CON GOOGLE',googleSub:'Continúa con tu cuenta Google · INACTIVO',bioTitle:'ENTRAR CON BIOMETRÍA',bioSub:'Usa la biometría de este dispositivo',stackTitle:'ENTRAR CON STACKUP ID',stackSub:'Usa tu e-mail y contraseña StackUp · INACTIVO',unavailable:'Recurso inactivo en esta versión.',bioScreenTitle:'BIOMETRÍA',bioScreenCopy:'Simulación funcional del flujo biométrico.',enter:'ENTRAR',back:'VOLVER',success:'Biometría validada. Acceso liberado.'}
+  };
+  let lang='pt';
+  const toast=document.getElementById('toast');
+  const bioScreen=document.getElementById('biometric-screen');
+  function showToast(text){toast.textContent=text;toast.style.opacity='1';toast.style.transform='translateX(-50%) translateY(0)';clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(-50%) translateY(18px)';},1600);}
+  function applyLanguage(next){lang=next;const t=translations[lang];document.querySelector('.tagline').textContent=t.tagline;const google=document.querySelector('[data-action="google"]');google.querySelector('.title').textContent=t.googleTitle;google.querySelector('.subtitle').innerHTML=t.googleSub.replace(/(INATIVO|INACTIVE|INACTIVO)$/,'<span class="status">$1</span>');const bio=document.querySelector('[data-action="biometria"]');bio.querySelector('.title').textContent=t.bioTitle;bio.querySelector('.subtitle').textContent=t.bioSub;const stack=document.querySelector('[data-action="stackup"]');stack.querySelector('.title').textContent=t.stackTitle;stack.querySelector('.subtitle').innerHTML=t.stackSub.replace(/(INATIVO|INACTIVE|INACTIVO)$/,'<span class="status">$1</span>');document.getElementById('bio-title').textContent=t.bioScreenTitle;document.getElementById('bio-copy').textContent=t.bioScreenCopy;document.getElementById('bio-enter').textContent=t.enter;document.getElementById('bio-back').textContent=t.back;}
+  document.querySelectorAll('[data-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLanguage(btn.dataset.lang)));
+  document.querySelector('[data-action="google"]').addEventListener('click',()=>showToast(translations[lang].unavailable));
+  document.querySelector('[data-action="stackup"]').addEventListener('click',()=>showToast(translations[lang].unavailable));
+  document.querySelector('[data-action="biometria"]').addEventListener('click',()=>{bioScreen.style.display='flex';});
+  document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
+  document.getElementById('bio-enter').addEventListener('click',()=>{bioScreen.style.display='none';showToast(translations[lang].success);});
+})();
+</script>
+</body>
+</html>
