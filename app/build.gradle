@@ -5,8 +5,11 @@ def academyKeystorePassword = System.getenv('STACKUP_UPLOAD_STORE_PASSWORD')
 def academyKeyAlias = System.getenv('STACKUP_UPLOAD_KEY_ALIAS')
 def academyKeyPassword = System.getenv('STACKUP_UPLOAD_KEY_PASSWORD')
 
+def stackupSupabaseKey = System.getenv('STACKUP_SUPABASE_PUBLISHABLE_KEY') ?: ''
+
 android {
     namespace 'com.skyare.stackupacademy'
+    buildFeatures { buildConfig true }
     compileSdk 36
 
     defaultConfig {
@@ -15,6 +18,7 @@ android {
         targetSdk 36
         versionCode 228
         versionName '2.1.12'
+        buildConfigField 'String', 'SUPABASE_PUBLISHABLE_KEY', '\"' + stackupSupabaseKey + '\"'
     }
 
     signingConfigs {
