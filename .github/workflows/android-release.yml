@@ -1,0 +1,56 @@
+name: Build Academy AAB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify approved front is packaged
+        shell: bash
+        run: cmp --silent index.html app/src/main/assets/index.html || (echo "Packaged front differs from approved index.html" && exit 1)
+
+      - name: Verify local-only Android shell
+        shell: bash
+        run: |
+          grep -q "applicationId 'com.skyare.stackupacademy'" app/build.gradle
+          grep -q "versionCode 226" app/build.gradle
+          grep -q 'file:///android_asset/index.html' app/src/main/java/com/skyare/stackupacademy/MainActivity.java
+          ! grep -R -E 'loadUrl\("https?://' app/src/main/java app/src/main/assets
+          ! grep -q 'android.permission.INTERNET' app/src/main/AndroidManifest.xml
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Decode upload keystore
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.ACADEMY_UPLOAD_KEYSTORE_B64 }}
+        run: |
+          test -n "$KEYSTORE_B64" || (echo "Missing ACADEMY_UPLOAD_KEYSTORE_B64" && exit 1)
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/academy-upload.jks"
+
+      - name: Build signed release AAB
+        env:
+          ACADEMY_KEYSTORE_PATH: ${{ runner.temp }}/academy-upload.jks
+          ACADEMY_KEYSTORE_PASSWORD: ${{ secrets.ACADEMY_KEYSTORE_PASSWORD }}
+          ACADEMY_KEY_ALIAS: ${{ secrets.ACADEMY_KEY_ALIAS }}
+          ACADEMY_KEY_PASSWORD: ${{ secrets.ACADEMY_KEY_PASSWORD }}
+        run: gradle --no-daemon bundleRelease
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stackup-academy-v226-aab
+          path: app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
