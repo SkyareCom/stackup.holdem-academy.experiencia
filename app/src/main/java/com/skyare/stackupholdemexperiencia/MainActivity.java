@@ -1,4 +1,4 @@
-package com.skyare.stackupholdemexperiencia;
+package com.skyare.stackupacademy;
 
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
