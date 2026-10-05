@@ -62,8 +62,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void js(String function, String value) {
-        String safe = value == null ? "" : value.replace("\\","\\\\").replace("'","\\'").replace("\n"," ");
-        runOnUiThread(() -> webView.evaluateJavascript("window."+function+"('"+safe+"')", null));
+        if (!"authSuccess".equals(function) && !"authError".equals(function)) return;
+        String safe = org.json.JSONObject.quote(value == null ? "" : value);
+        runOnUiThread(() -> webView.evaluateJavascript("window."+function+"("+safe+")", null));
     }
 
     public class AndroidAuth {
