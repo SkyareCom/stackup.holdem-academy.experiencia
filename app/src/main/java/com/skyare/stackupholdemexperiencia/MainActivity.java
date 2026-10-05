@@ -109,6 +109,11 @@ public class MainActivity extends FragmentActivity {
             }).start();
         }
 
+        @JavascriptInterface public void logout() {
+            clearRefreshToken();
+            js("authSuccess","logout");
+        }
+
         @JavascriptInterface public void biometricLogin() {
             runOnUiThread(() -> {
                 BiometricManager manager = BiometricManager.from(MainActivity.this);
