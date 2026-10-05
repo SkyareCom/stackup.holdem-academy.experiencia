@@ -735,7 +735,7 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin)AndroidAuth.googleLogin();});
   document.getElementById('bio-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.biometricLogin)AndroidAuth.biometricLogin();});
   document.getElementById('stackup-form').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('stackup-id').value.trim(),pw=document.getElementById('stackup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupLogin)AndroidAuth.stackupLogin(id,pw);});
-  window.authSuccess=function(){document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';if(window.openAcademyHome)window.openAcademyHome();};
+  window.authSuccess=function(action){document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';const pw=document.getElementById('stackup-password');if(pw)pw.value='';if(action==='logout')return;if(window.openAcademyHome)window.openAcademyHome();};
   window.authError=function(message){const toast=document.getElementById('toast');toast.textContent=message||'Não foi possível autenticar.';toast.style.opacity='1';toast.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(-50%) translateY(18px)'},2200);};
 })();
 </script>
