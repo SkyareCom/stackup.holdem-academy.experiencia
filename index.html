@@ -652,7 +652,7 @@ button{appearance:none;border:none;outline:none;background:none;}
     <section class="cards" aria-label="login methods">
       <button class="card" type="button" data-action="google">
         <div class="icon-wrap"><div class="g-icon"><span>G</span></div></div>
-        <div class="copy"><div class="title">ENTRAR COM GOOGLE</div><div class="subtitle">Acesso temporário liberado</div></div>
+        <div class="copy"><div class="title">ENTRAR COM GOOGLE</div><div class="subtitle">Use sua conta Google</div></div>
         <div class="chev"></div>
       </button>
       <button class="card" type="button" data-action="biometria">
@@ -697,6 +697,16 @@ button{appearance:none;border:none;outline:none;background:none;}
       <button id="google-enter" class="auth-btn auth-provider" type="button"><span class="g-icon"><span>G</span></span><span>CONTINUAR COM GOOGLE</span></button>
       <button class="auth-cancel" data-auth-close="google-modal" type="button">CANCELAR</button>
     </div>
+  </section>
+  <section id="signup-modal" class="auth-modal" aria-modal="true" role="dialog">
+    <form id="signup-form" class="auth-card">
+      <div class="auth-title">CRIAR CONTA STACKUP</div>
+      <div class="auth-copy">Crie seu StackUp ID para usar em todo o ecossistema StackUp Hold'em.</div>
+      <input id="signup-email" class="auth-input" type="email" autocomplete="email" placeholder="E-MAIL" required>
+      <input id="signup-password" class="auth-input" type="password" autocomplete="new-password" placeholder="SENHA" minlength="6" required>
+      <button class="auth-btn" type="submit">CRIAR CONTA</button>
+      <button class="auth-cancel" data-auth-close="signup-modal" type="button">CANCELAR</button>
+    </form>
   </section>
   <section id="stackup-modal" class="auth-modal" aria-modal="true" role="dialog">
     <form id="stackup-form" class="auth-card">
