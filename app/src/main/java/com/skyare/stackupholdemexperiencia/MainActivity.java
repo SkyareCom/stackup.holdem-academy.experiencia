@@ -2,6 +2,8 @@ package com.skyare.stackupholdemexperiencia;
 
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
+import android.content.Intent;
+import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -45,7 +47,12 @@ public class MainActivity extends FragmentActivity {
 
     public class AndroidAuth {
         @JavascriptInterface public void googleLogin() {
-            js("authError", "Google está preparado para o Supabase; falta validar o OAuth Google do projeto antes de liberar.");
+            try {
+                String redirect = "stackupexperiencia://auth/callback";
+                String authUrl = SUPABASE_URL + "/auth/v1/authorize?provider=google&redirect_to=" +
+                    java.net.URLEncoder.encode(redirect, "UTF-8");
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+            } catch(Exception e) { js("authError","Não foi possível iniciar o login Google."); }
         }
 
         @JavascriptInterface public void stackupLogin(String email, String password) {
@@ -120,6 +127,38 @@ public class MainActivity extends FragmentActivity {
                 c.disconnect();
             } catch(Exception e){ js("authError","Não foi possível validar sua sessão."); }
         }).start();
+    }
+
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleAuthCallback(intent);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        handleAuthCallback(getIntent());
+    }
+
+    private void handleAuthCallback(Intent intent) {
+        if(intent==null || intent.getData()==null) return;
+        Uri u=intent.getData();
+        if(!"stackupexperiencia".equals(u.getScheme()) || !"auth".equals(u.getHost())) return;
+        String fragment=u.getFragment();
+        if(fragment==null) { js("authError","Retorno do Google sem sessão válida."); return; }
+        try {
+            java.util.Map<String,String> values=new java.util.HashMap<>();
+            for(String part:fragment.split("&")){
+                String[] kv=part.split("=",2);
+                if(kv.length==2) values.put(java.net.URLDecoder.decode(kv[0],"UTF-8"),java.net.URLDecoder.decode(kv[1],"UTF-8"));
+            }
+            String refresh=values.get("refresh_token");
+            if(refresh!=null && !refresh.isEmpty()){
+                getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",refresh).apply();
+                intent.setData(null);
+                js("authSuccess","");
+            } else js("authError","Não foi possível concluir a sessão Google.");
+        } catch(Exception e){ js("authError","Não foi possível validar o retorno Google."); }
     }
 
     @Override public void onBackPressed() {
