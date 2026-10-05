@@ -1,5 +1,6 @@
 package com.skyare.stackupacademy;
 
+// Client-side Supabase configuration; never place service-role secrets here.
 final class AuthConfig {
     private AuthConfig() {}
     static final String SUPABASE_URL = "https://mzlznwnxahixoqyspsdy.supabase.co";
