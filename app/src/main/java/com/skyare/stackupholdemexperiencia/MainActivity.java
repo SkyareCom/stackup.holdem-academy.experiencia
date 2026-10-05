@@ -4,6 +4,14 @@ import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import android.util.Base64;
+import java.security.KeyStore;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -89,7 +97,7 @@ public class MainActivity extends FragmentActivity {
                         org.json.JSONObject o=new org.json.JSONObject(json);
                         String refresh=o.optString("refresh_token","");
                         if(refresh.isEmpty()) js("authError","Sessão inválida. Tente novamente.");
-                        else { getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",refresh).apply(); js("authSuccess",""); }
+                        else { saveRefreshToken(refresh); js("authSuccess",""); }
                     } else js("authError","StackUp ID ou senha inválidos.");
                     c.disconnect();
                 } catch(Exception e){ js("authError","Não foi possível conectar ao STACKUP ID."); }
@@ -124,6 +132,45 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    private static final String KEY_ALIAS="stackup_session_key";
+
+    private SecretKey sessionKey() throws Exception {
+        KeyStore ks=KeyStore.getInstance("AndroidKeyStore"); ks.load(null);
+        if(!ks.containsAlias(KEY_ALIAS)){
+            KeyGenerator kg=KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,"AndroidKeyStore");
+            kg.init(new KeyGenParameterSpec.Builder(KEY_ALIAS,KeyProperties.PURPOSE_ENCRYPT|KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build());
+            kg.generateKey();
+        }
+        return ((KeyStore.SecretKeyEntry)ks.getEntry(KEY_ALIAS,null)).getSecretKey();
+    }
+
+    private void saveRefreshToken(String token) {
+        try {
+            Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding"); cipher.init(Cipher.ENCRYPT_MODE,sessionKey());
+            byte[] encrypted=cipher.doFinal(token.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            getSharedPreferences("stackup_auth",MODE_PRIVATE).edit()
+                .putString("refresh_token_enc",Base64.encodeToString(encrypted,Base64.NO_WRAP))
+                .putString("refresh_token_iv",Base64.encodeToString(cipher.getIV(),Base64.NO_WRAP))
+                .remove("refresh_token").apply();
+        } catch(Exception e){ clearRefreshToken(); }
+    }
+
+    private String loadRefreshToken() {
+        try {
+            android.content.SharedPreferences p=getSharedPreferences("stackup_auth",MODE_PRIVATE);
+            String enc=p.getString("refresh_token_enc",""), iv=p.getString("refresh_token_iv","");
+            if(enc.isEmpty()||iv.isEmpty()) return "";
+            Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE,sessionKey(),new GCMParameterSpec(128,Base64.decode(iv,Base64.NO_WRAP)));
+            return new String(cipher.doFinal(Base64.decode(enc,Base64.NO_WRAP)),java.nio.charset.StandardCharsets.UTF_8);
+        } catch(Exception e){ clearRefreshToken(); return ""; }
+    }
+
+    private void clearRefreshToken() {
+        getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().clear().apply();
+    }
+
     private static String readUtf8(java.io.InputStream in) throws java.io.IOException {
         java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
         byte[] buffer=new byte[4096]; int n;
@@ -145,9 +192,9 @@ public class MainActivity extends FragmentActivity {
                     try(java.io.InputStream in=c.getInputStream()){ json=readUtf8(in); }
                     org.json.JSONObject o=new org.json.JSONObject(json);
                     String next=o.optString("refresh_token",refresh);
-                    getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",next).apply();
+                    saveRefreshToken(next);
                     js("authSuccess","");
-                } else { getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().clear().apply(); js("authError","Sessão expirada. Entre novamente com Google ou STACKUP ID."); }
+                } else { clearRefreshToken(); js("authError","Sessão expirada. Entre novamente com Google ou STACKUP ID."); }
                 c.disconnect();
             } catch(Exception e){ js("authError","Não foi possível validar sua sessão."); }
         }).start();
@@ -178,7 +225,7 @@ public class MainActivity extends FragmentActivity {
             }
             String refresh=values.get("refresh_token");
             if(refresh!=null && !refresh.isEmpty()){
-                getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",refresh).apply();
+                saveRefreshToken(refresh);
                 intent.setData(null);
                 js("authSuccess","");
             } else js("authError","Não foi possível concluir a sessão Google.");
