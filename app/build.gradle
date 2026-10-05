@@ -1,5 +1,10 @@
 plugins { id 'com.android.application' }
 
+def academyKeystorePath = System.getenv('ACADEMY_KEYSTORE_PATH')
+def academyKeystorePassword = System.getenv('ACADEMY_KEYSTORE_PASSWORD')
+def academyKeyAlias = System.getenv('ACADEMY_KEY_ALIAS')
+def academyKeyPassword = System.getenv('ACADEMY_KEY_PASSWORD')
+
 android {
     namespace 'com.skyare.stackupacademy'
     compileSdk 36
@@ -12,8 +17,20 @@ android {
         versionName '1.0.9'
     }
 
+    signingConfigs {
+        release {
+            if (academyKeystorePath) {
+                storeFile file(academyKeystorePath)
+                storePassword academyKeystorePassword
+                keyAlias academyKeyAlias
+                keyPassword academyKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
