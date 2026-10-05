@@ -701,11 +701,23 @@ button{appearance:none;border:none;outline:none;background:none;}
   <section id="stackup-modal" class="auth-modal" aria-modal="true" role="dialog">
     <form id="stackup-form" class="auth-card">
       <div class="auth-title">STACKUP ID</div>
-      <div class="auth-copy">Entre com seu StackUp ID na própria tela de entrada.</div>
-      <input id="stackup-id" class="auth-input" type="text" autocomplete="username" placeholder="E-MAIL OU STACKUP ID" required>
-      <input id="stackup-password" class="auth-input" type="password" autocomplete="current-password" placeholder="SENHA" required>
+      <div class="auth-copy">Seu StackUp ID é o e-mail da sua conta StackUp Hold'em.</div>
+      <input id="stackup-id" class="auth-input" type="email" autocomplete="username" placeholder="E-MAIL" required>
+      <input id="stackup-password" class="auth-input" type="password" autocomplete="current-password" placeholder="SENHA" minlength="6" required>
       <button class="auth-btn" type="submit">ENTRAR</button>
+      <button id="stackup-forgot" class="auth-cancel" type="button">ESQUECI MINHA SENHA</button>
       <button class="auth-cancel" data-auth-close="stackup-modal" type="button">CANCELAR</button>
+    </form>
+  </section>
+  <section id="stackup-create-modal" class="auth-modal" aria-modal="true" role="dialog">
+    <form id="stackup-create-form" class="auth-card">
+      <div class="auth-title">CRIAR CONTA STACKUP HOLD'EM</div>
+      <div class="auth-copy">Uma única conta para os aplicativos StackUp Hold'em. Seu StackUp ID será seu e-mail.</div>
+      <input id="stackup-create-name" class="auth-input" type="text" autocomplete="name" placeholder="NOME" required>
+      <input id="stackup-create-email" class="auth-input" type="email" autocomplete="email" placeholder="E-MAIL" required>
+      <input id="stackup-create-password" class="auth-input" type="password" autocomplete="new-password" placeholder="SENHA · MÍNIMO 6 CARACTERES" minlength="6" required>
+      <button class="auth-btn" type="submit">CRIAR CONTA</button>
+      <button class="auth-cancel" data-auth-close="stackup-create-modal" type="button">CANCELAR</button>
     </form>
   </section>
 </main>
@@ -736,7 +748,15 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
   document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin)AndroidAuth.googleLogin();});
   document.getElementById('bio-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.biometricLogin)AndroidAuth.biometricLogin();});
-  document.getElementById('stackup-form').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('stackup-id').value.trim(),pw=document.getElementById('stackup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupLogin)AndroidAuth.stackupLogin(id,pw);});
+  const SUPABASE_URL='https://mzlznwnxahixoqyspsdy.supabase.co';
+  const SUPABASE_KEY='sb_publishable_E9cnM9HPU19f9hdFxzjXrg_FkD6clWQ';
+  const authHeaders={'apikey':SUPABASE_KEY,'Content-Type':'application/json'};
+  const authRequest=async(path,body)=>{const res=await fetch(SUPABASE_URL+path,{method:'POST',headers:authHeaders,body:JSON.stringify(body)});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.msg||data.message||data.error_description||'Não foi possível autenticar.');return data};
+  const saveSession=data=>{if(data&&data.access_token){sessionStorage.setItem('stackup.access_token',data.access_token);if(data.refresh_token)localStorage.setItem('stackup.refresh_token',data.refresh_token);if(data.user)localStorage.setItem('stackup.user',JSON.stringify({id:data.user.id,email:data.user.email}));}};
+  document.querySelector('[data-action="create-stackup"]').addEventListener('click',()=>openModal('stackup-create-modal'));
+  document.getElementById('stackup-form').addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('stackup-id').value.trim().toLowerCase(),password=document.getElementById('stackup-password').value;try{const data=await authRequest('/auth/v1/token?grant_type=password',{email,password});saveSession(data);window.authSuccess()}catch(err){window.authError(err.message)}});
+  document.getElementById('stackup-create-form').addEventListener('submit',async e=>{e.preventDefault();const name=document.getElementById('stackup-create-name').value.trim(),email=document.getElementById('stackup-create-email').value.trim().toLowerCase(),password=document.getElementById('stackup-create-password').value;try{const data=await authRequest('/auth/v1/signup',{email,password,data:{full_name:name,stackup_id:email}});if(data.access_token){saveSession(data);window.authSuccess()}else{closeModal('stackup-create-modal');window.authError('Conta criada. Confirme seu e-mail para entrar.')}}catch(err){window.authError(err.message)}});
+  document.getElementById('stackup-forgot').addEventListener('click',async()=>{const email=document.getElementById('stackup-id').value.trim().toLowerCase();if(!email){window.authError('Informe seu e-mail StackUp ID.');return}try{await authRequest('/auth/v1/recover',{email});window.authError('Enviamos as instruções de recuperação para seu e-mail.')}catch(err){window.authError(err.message)}});
   window.authSuccess=function(){document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';if(window.openAcademyHome)window.openAcademyHome();};
   window.authError=function(message){const toast=document.getElementById('toast');toast.textContent=message||'Não foi possível autenticar.';toast.style.opacity='1';toast.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(-50%) translateY(18px)'},2200);};
 })();
