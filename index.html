@@ -755,7 +755,7 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.querySelector('[data-action="biometria"]').addEventListener('click',()=>{bioScreen.style.display='flex';});
   document.querySelectorAll('[data-auth-close]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();closeModal(btn.dataset.authClose)}));
   document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
-  document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin){AndroidAuth.googleLogin();return}window.authSuccess();});
+  document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin){AndroidAuth.googleLogin();return}document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';const shell=document.getElementById('internal-shell');if(shell)shell.classList.add('active');document.querySelectorAll('.internal-page').forEach(p=>p.classList.toggle('active',p.dataset.page==='home'));document.querySelectorAll('[data-page-target]').forEach(b=>b.classList.toggle('active',b.dataset.pageTarget==='home'));document.querySelectorAll('.internal-bg').forEach(el=>el.style.backgroundImage='url('+window.ACADEMY_BG+')');document.querySelectorAll('.internal-logo').forEach(el=>el.src=window.ACADEMY_LOGO);});
   document.getElementById('bio-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.biometricLogin)AndroidAuth.biometricLogin();});
   const SUPABASE_URL='https://mzlznwnxahixoqyspsdy.supabase.co';
   const SUPABASE_KEY='sb_publishable_E9cnM9HPU19f9hdFxzjXrg_FkD6clWQ';
