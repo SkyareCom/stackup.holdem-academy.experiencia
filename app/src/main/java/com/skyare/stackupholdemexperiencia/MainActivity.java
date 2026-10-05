@@ -86,6 +86,7 @@ public class MainActivity extends FragmentActivity {
                 try {
                     java.net.URL url = new java.net.URL(SUPABASE_URL + "/auth/v1/token?grant_type=password");
                     java.net.HttpURLConnection c = (java.net.HttpURLConnection) url.openConnection();
+                    c.setConnectTimeout(10000); c.setReadTimeout(15000);
                     c.setRequestMethod("POST"); c.setDoOutput(true);
                     c.setRequestProperty("apikey", SUPABASE_KEY);
                     c.setRequestProperty("Content-Type", "application/json");
@@ -197,11 +198,13 @@ public class MainActivity extends FragmentActivity {
             try {
                 java.net.URL url=new java.net.URL(SUPABASE_URL+"/auth/v1/token?grant_type=refresh_token");
                 java.net.HttpURLConnection c=(java.net.HttpURLConnection)url.openConnection();
+                c.setConnectTimeout(10000); c.setReadTimeout(15000);
                 c.setRequestMethod("POST"); c.setDoOutput(true);
                 c.setRequestProperty("apikey",SUPABASE_KEY); c.setRequestProperty("Content-Type","application/json");
                 org.json.JSONObject body=new org.json.JSONObject(); body.put("refresh_token",refresh);
                 try(java.io.OutputStream os=c.getOutputStream()){os.write(body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}
-                if(c.getResponseCode()>=200 && c.getResponseCode()<300){
+                int status=c.getResponseCode();
+                if(status>=200 && status<300){
                     String json;
                     try(java.io.InputStream in=c.getInputStream()){ json=readUtf8(in); }
                     org.json.JSONObject o=new org.json.JSONObject(json);
