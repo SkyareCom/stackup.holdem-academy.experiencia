@@ -110,6 +110,33 @@ public class MainActivity extends FragmentActivity {
             }).start();
         }
 
+        @JavascriptInterface public void stackupSignup(String email, String password) {
+            new Thread(() -> {
+                try {
+                    java.net.URL url = new java.net.URL(SUPABASE_URL + "/auth/v1/signup");
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(10000); conn.setReadTimeout(15000);
+                    conn.setRequestMethod("POST"); conn.setDoOutput(true);
+                    conn.setRequestProperty("apikey", SUPABASE_KEY);
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    org.json.JSONObject body = new org.json.JSONObject();
+                    body.put("email", email == null ? "" : email.trim());
+                    body.put("password", password == null ? "" : password);
+                    try(java.io.OutputStream os=conn.getOutputStream()){os.write(body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}
+                    int status=conn.getResponseCode();
+                    String json;
+                    try(java.io.InputStream in=(status>=200&&status<300)?conn.getInputStream():conn.getErrorStream()){json=in==null?"":readUtf8(in);}
+                    if(status>=200&&status<300){
+                        org.json.JSONObject o=new org.json.JSONObject(json);
+                        String refresh=o.optString("refresh_token","");
+                        if(!refresh.isEmpty()){saveRefreshToken(refresh);js("authSuccess","");}
+                        else js("authError","Conta criada. Confirme seu e-mail para entrar.");
+                    } else js("authError","Não foi possível criar a conta StackUp.");
+                    conn.disconnect();
+                } catch(Exception e){js("authError","Não foi possível criar a conta StackUp.");}
+            }).start();
+        }
+
         @JavascriptInterface public void logout() {
             clearRefreshToken();
             js("authSuccess","logout");
