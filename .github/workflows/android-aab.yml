@@ -2,7 +2,7 @@ name: Android AAB
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, academy-verde3-stackup-auth ]
     paths:
       - 'app/**'
       - 'build.gradle'
