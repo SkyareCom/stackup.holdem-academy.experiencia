@@ -1,9 +1,9 @@
 plugins { id 'com.android.application' }
 
-def academyKeystorePath = System.getenv('ACADEMY_KEYSTORE_PATH')
-def academyKeystorePassword = System.getenv('ACADEMY_KEYSTORE_PASSWORD')
-def academyKeyAlias = System.getenv('ACADEMY_KEY_ALIAS')
-def academyKeyPassword = System.getenv('ACADEMY_KEY_PASSWORD')
+def academyKeystorePath = System.getenv('STACKUP_UPLOAD_KEYSTORE')
+def academyKeystorePassword = System.getenv('STACKUP_UPLOAD_STORE_PASSWORD')
+def academyKeyAlias = System.getenv('STACKUP_UPLOAD_KEY_ALIAS')
+def academyKeyPassword = System.getenv('STACKUP_UPLOAD_KEY_PASSWORD')
 
 android {
     namespace 'com.skyare.stackupacademy'
@@ -13,8 +13,8 @@ android {
         applicationId 'com.skyare.stackupacademy'
         minSdk 24
         targetSdk 36
-        versionCode 226
-        versionName '1.0.9'
+        versionCode 228
+        versionName '2.1.12'
     }
 
     signingConfigs {
