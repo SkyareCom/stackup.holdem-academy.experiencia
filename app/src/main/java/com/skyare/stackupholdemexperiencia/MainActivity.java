@@ -45,6 +45,10 @@ public class MainActivity extends FragmentActivity {
                 try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); } catch(Exception ignored) {}
                 return true;
             }
+            @Override public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view,url);
+                if ("file:///android_asset/index.html".equals(url)) restoreSession();
+            }
             @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Uri uri=Uri.parse(url);
                 if ("file".equals(uri.getScheme()) && "/android_asset/index.html".equals(uri.getPath())) return false;
@@ -176,6 +180,11 @@ public class MainActivity extends FragmentActivity {
         byte[] buffer=new byte[4096]; int n;
         while((n=in.read(buffer))!=-1) out.write(buffer,0,n);
         return out.toString("UTF-8");
+    }
+
+    private void restoreSession() {
+        String refresh=loadRefreshToken();
+        if(!refresh.isEmpty()) refreshSession(refresh);
     }
 
     private void refreshSession(String refresh) {
