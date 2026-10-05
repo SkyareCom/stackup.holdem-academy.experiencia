@@ -178,39 +178,6 @@ public class MainActivity extends FragmentActivity {
         getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().clear().apply();
     }
 
-    private static final String KEY_ALIAS="stackup_session_key";
-
-    private SecretKey sessionKey() throws Exception {
-        KeyStore ks=KeyStore.getInstance("AndroidKeyStore"); ks.load(null);
-        if(!ks.containsAlias(KEY_ALIAS)){
-            KeyGenerator kg=KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,"AndroidKeyStore");
-            kg.init(new KeyGenParameterSpec.Builder(KEY_ALIAS,KeyProperties.PURPOSE_ENCRYPT|KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build());
-            kg.generateKey();
-        }
-        return ((KeyStore.SecretKeyEntry)ks.getEntry(KEY_ALIAS,null)).getSecretKey();
-    }
-
-    private void saveRefreshToken(String token) throws Exception {
-        Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding"); cipher.init(Cipher.ENCRYPT_MODE,sessionKey());
-        String iv=Base64.encodeToString(cipher.getIV(),Base64.NO_WRAP);
-        String data=Base64.encodeToString(cipher.doFinal(token.getBytes(java.nio.charset.StandardCharsets.UTF_8)),Base64.NO_WRAP);
-        getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("iv",iv).putString("token",data).remove("refresh_token").apply();
-    }
-
-    private String loadRefreshToken() {
-        try{
-            android.content.SharedPreferences p=getSharedPreferences("stackup_auth",MODE_PRIVATE);
-            String iv=p.getString("iv",""), data=p.getString("token","");
-            if(iv.isEmpty()||data.isEmpty()) return "";
-            Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");
-            cipher.init(Cipher.DECRYPT_MODE,sessionKey(),new GCMParameterSpec(128,Base64.decode(iv,Base64.NO_WRAP)));
-            return new String(cipher.doFinal(Base64.decode(data,Base64.NO_WRAP)),java.nio.charset.StandardCharsets.UTF_8);
-        }catch(Exception e){ clearRefreshToken(); return ""; }
-    }
-
-    private void clearRefreshToken(){ getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().clear().apply(); }
-
     private static String readUtf8(java.io.InputStream in) throws java.io.IOException {
         java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
         byte[] buffer=new byte[4096]; int n;
