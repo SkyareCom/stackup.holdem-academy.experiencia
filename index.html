@@ -741,12 +741,14 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.querySelectorAll('[data-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLanguage(btn.dataset.lang)));
   document.querySelector('[data-action="google"]').addEventListener('click',()=>openModal('google-modal'));
   document.querySelector('[data-action="stackup"]').addEventListener('click',()=>openModal('stackup-modal'));
+  document.querySelector('[data-action="create-stackup"]').addEventListener('click',()=>openModal('signup-modal'));
   document.querySelector('[data-action="biometria"]').addEventListener('click',()=>{bioScreen.style.display='flex';});
   document.querySelectorAll('[data-auth-close]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();closeModal(btn.dataset.authClose)}));
   document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
   document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin)AndroidAuth.googleLogin();});
   document.getElementById('bio-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.biometricLogin)AndroidAuth.biometricLogin();});
   document.getElementById('stackup-form').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('stackup-id').value.trim(),pw=document.getElementById('stackup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupLogin)AndroidAuth.stackupLogin(id,pw);});
+  document.getElementById('signup-form').addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('signup-email').value.trim(),pw=document.getElementById('signup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupSignup)AndroidAuth.stackupSignup(email,pw);else window.authError('Cadastro indisponível neste dispositivo.');});
   window.authSuccess=function(){document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';if(window.openAcademyHome)window.openAcademyHome();};
   window.authError=function(message){const toast=document.getElementById('toast');toast.textContent=message||'Não foi possível autenticar.';toast.style.opacity='1';toast.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(-50%) translateY(18px)'},2200);};
 })();
