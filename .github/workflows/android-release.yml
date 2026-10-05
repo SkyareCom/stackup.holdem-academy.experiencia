@@ -19,10 +19,12 @@ jobs:
         shell: bash
         run: |
           grep -q "applicationId 'com.skyare.stackupacademy'" app/build.gradle
-          grep -q "versionCode 226" app/build.gradle
+          grep -q "versionCode 228" app/build.gradle
           grep -q 'file:///android_asset/index.html' app/src/main/java/com/skyare/stackupacademy/MainActivity.java
           ! grep -R -E 'loadUrl\("https?://' app/src/main/java app/src/main/assets
-          ! grep -q 'android.permission.INTERNET' app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.INTERNET' app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.USE_BIOMETRIC' app/src/main/AndroidManifest.xml
+          ! grep -R -E 'loadUrl\("https?://' app/src/main/java
 
       - uses: actions/setup-java@v4
         with:
@@ -47,10 +49,13 @@ jobs:
           ACADEMY_KEYSTORE_PASSWORD: ${{ secrets.ACADEMY_KEYSTORE_PASSWORD }}
           ACADEMY_KEY_ALIAS: ${{ secrets.ACADEMY_KEY_ALIAS }}
           ACADEMY_KEY_PASSWORD: ${{ secrets.ACADEMY_KEY_PASSWORD }}
-        run: gradle --no-daemon bundleRelease
+          STACKUP_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.STACKUP_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$STACKUP_SUPABASE_PUBLISHABLE_KEY" || (echo "Missing STACKUP_SUPABASE_PUBLISHABLE_KEY" && exit 1)
+          gradle --no-daemon bundleRelease
 
       - uses: actions/upload-artifact@v4
         with:
-          name: stackup-academy-v226-aab
+          name: stackup-academy-v228-aab
           path: app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
