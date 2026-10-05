@@ -76,12 +76,15 @@ public class MainActivity extends FragmentActivity {
                     c.setRequestMethod("POST"); c.setDoOutput(true);
                     c.setRequestProperty("apikey", SUPABASE_KEY);
                     c.setRequestProperty("Content-Type", "application/json");
-                    String body = "{\"email\":\""+email.replace("\\","\\\\").replace("\"","\\\"")+"\",\"password\":\""+password.replace("\\","\\\\").replace("\"","\\\"")+"\"}";
+                    org.json.JSONObject requestBody = new org.json.JSONObject();
+                    requestBody.put("email", email == null ? "" : email.trim());
+                    requestBody.put("password", password == null ? "" : password);
+                    String body = requestBody.toString();
                     try(java.io.OutputStream os=c.getOutputStream()){os.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8));}
                     int status=c.getResponseCode();
                     if(status>=200 && status<300) {
                         java.io.InputStream in=c.getInputStream();
-                        String json=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
+                        String json=readUtf8(in);
                         in.close();
                         org.json.JSONObject o=new org.json.JSONObject(json);
                         String refresh=o.optString("refresh_token","");
@@ -121,6 +124,13 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    private static String readUtf8(java.io.InputStream in) throws java.io.IOException {
+        java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
+        byte[] buffer=new byte[4096]; int n;
+        while((n=in.read(buffer))!=-1) out.write(buffer,0,n);
+        return out.toString("UTF-8");
+    }
+
     private void refreshSession(String refresh) {
         new Thread(() -> {
             try {
@@ -131,7 +141,8 @@ public class MainActivity extends FragmentActivity {
                 org.json.JSONObject body=new org.json.JSONObject(); body.put("refresh_token",refresh);
                 try(java.io.OutputStream os=c.getOutputStream()){os.write(body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}
                 if(c.getResponseCode()>=200 && c.getResponseCode()<300){
-                    String json=new String(c.getInputStream().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
+                    String json;
+                    try(java.io.InputStream in=c.getInputStream()){ json=readUtf8(in); }
                     org.json.JSONObject o=new org.json.JSONObject(json);
                     String next=o.optString("refresh_token",refresh);
                     getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",next).apply();
