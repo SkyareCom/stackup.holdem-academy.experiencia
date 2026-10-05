@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void js(String function, String value) {
-        if (!"authSuccess".equals(function) && !"authError".equals(function)) return;
+        if (!"authSuccess".equals(function) && !"authError".equals(function) && !"authRecovery".equals(function)) return;
         String safe = org.json.JSONObject.quote(value == null ? "" : value);
         runOnUiThread(() -> webView.evaluateJavascript("window."+function+"("+safe+")", null));
     }
@@ -244,7 +244,12 @@ public class MainActivity extends FragmentActivity {
                 if(kv.length==2) values.put(java.net.URLDecoder.decode(kv[0],"UTF-8"),java.net.URLDecoder.decode(kv[1],"UTF-8"));
             }
             String refresh=values.get("refresh_token");
-            if(refresh!=null && !refresh.isEmpty()){
+            String access=values.get("access_token");
+            String type=values.get("type");
+            if("recovery".equals(type) && access!=null && !access.isEmpty()){
+                intent.setData(null);
+                js("authRecovery",access);
+            } else if(refresh!=null && !refresh.isEmpty()){
                 saveRefreshToken(refresh);
                 intent.setData(null);
                 js("authSuccess","");
