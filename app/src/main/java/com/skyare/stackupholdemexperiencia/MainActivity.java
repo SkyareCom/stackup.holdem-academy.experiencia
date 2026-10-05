@@ -1,6 +1,6 @@
 package com.skyare.stackupholdemexperiencia;
 
-import android.app.Activity;
+import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -12,7 +12,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import java.util.concurrent.Executor;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
     private WebView webView;
     private static final String SUPABASE_URL = "https://mzlznwnxahixoqyspsdy.supabase.co";
     private static final String SUPABASE_KEY = "sb_publishable_E9cnM9HPU19f9hdFxzjXrg_FkD6clWQ";
@@ -59,8 +59,15 @@ public class MainActivity extends Activity {
                     String body = "{\"email\":\""+email.replace("\\","\\\\").replace("\"","\\\"")+"\",\"password\":\""+password.replace("\\","\\\\").replace("\"","\\\"")+"\"}";
                     try(java.io.OutputStream os=c.getOutputStream()){os.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8));}
                     int status=c.getResponseCode();
-                    if(status>=200 && status<300) js("authSuccess","");
-                    else js("authError","StackUp ID ou senha inválidos.");
+                    if(status>=200 && status<300) {
+                        java.io.InputStream in=c.getInputStream();
+                        String json=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
+                        in.close();
+                        org.json.JSONObject o=new org.json.JSONObject(json);
+                        String refresh=o.optString("refresh_token","");
+                        if(refresh.isEmpty()) js("authError","Sessão inválida. Tente novamente.");
+                        else { getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",refresh).apply(); js("authSuccess",""); }
+                    } else js("authError","StackUp ID ou senha inválidos.");
                     c.disconnect();
                 } catch(Exception e){ js("authError","Não foi possível conectar ao STACKUP ID."); }
             }).start();
@@ -75,7 +82,13 @@ public class MainActivity extends Activity {
                 }
                 Executor executor = ContextCompat.getMainExecutor(MainActivity.this);
                 BiometricPrompt prompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
-                    @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) { super.onAuthenticationSucceeded(result); js("authSuccess",""); }
+                    @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                        super.onAuthenticationSucceeded(result);
+                        android.content.SharedPreferences p=getSharedPreferences("stackup_auth",MODE_PRIVATE);
+                        String refresh=p.getString("refresh_token","");
+                        if(refresh.isEmpty()){ js("authError","Entre primeiro com Google ou STACKUP ID para ativar a biometria."); return; }
+                        refreshSession(refresh);
+                    }
                     @Override public void onAuthenticationError(int code, CharSequence msg) { super.onAuthenticationError(code,msg); js("authError",msg.toString()); }
                 });
                 BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
@@ -86,6 +99,27 @@ public class MainActivity extends Activity {
                 prompt.authenticate(info);
             });
         }
+    }
+
+    private void refreshSession(String refresh) {
+        new Thread(() -> {
+            try {
+                java.net.URL url=new java.net.URL(SUPABASE_URL+"/auth/v1/token?grant_type=refresh_token");
+                java.net.HttpURLConnection c=(java.net.HttpURLConnection)url.openConnection();
+                c.setRequestMethod("POST"); c.setDoOutput(true);
+                c.setRequestProperty("apikey",SUPABASE_KEY); c.setRequestProperty("Content-Type","application/json");
+                org.json.JSONObject body=new org.json.JSONObject(); body.put("refresh_token",refresh);
+                try(java.io.OutputStream os=c.getOutputStream()){os.write(body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}
+                if(c.getResponseCode()>=200 && c.getResponseCode()<300){
+                    String json=new String(c.getInputStream().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
+                    org.json.JSONObject o=new org.json.JSONObject(json);
+                    String next=o.optString("refresh_token",refresh);
+                    getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().putString("refresh_token",next).apply();
+                    js("authSuccess","");
+                } else { getSharedPreferences("stackup_auth",MODE_PRIVATE).edit().clear().apply(); js("authError","Sessão expirada. Entre novamente com Google ou STACKUP ID."); }
+                c.disconnect();
+            } catch(Exception e){ js("authError","Não foi possível validar sua sessão."); }
+        }).start();
     }
 
     @Override public void onBackPressed() {
