@@ -2,13 +2,20 @@ package com.skyare.stackupholdemexperiencia;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.window.OnBackInvokedDispatcher;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends Activity {
     private WebView webView;
+    private static final String SUPABASE_URL = "https://mzlznwnxahixoqyspsdy.supabase.co";
+    private static final String SUPABASE_KEY = "sb_publishable_E9cnM9HPU19f9hdFxzjXrg_FkD6clWQ";
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -20,6 +27,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(false);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        webView.addJavascriptInterface(new AndroidAuth(), "AndroidAuth");
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("file:///android_asset/index.html");
         if (android.os.Build.VERSION.SDK_INT >= 33) {
@@ -27,6 +35,56 @@ public class MainActivity extends Activity {
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                 () -> { if (webView.canGoBack()) webView.goBack(); else finish(); }
             );
+        }
+    }
+
+    private void js(String function, String value) {
+        String safe = value == null ? "" : value.replace("\\","\\\\").replace("'","\\'").replace("\n"," ");
+        runOnUiThread(() -> webView.evaluateJavascript("window."+function+"('"+safe+"')", null));
+    }
+
+    public class AndroidAuth {
+        @JavascriptInterface public void googleLogin() {
+            js("authError", "Google está preparado para o Supabase; falta validar o OAuth Google do projeto antes de liberar.");
+        }
+
+        @JavascriptInterface public void stackupLogin(String email, String password) {
+            new Thread(() -> {
+                try {
+                    java.net.URL url = new java.net.URL(SUPABASE_URL + "/auth/v1/token?grant_type=password");
+                    java.net.HttpURLConnection c = (java.net.HttpURLConnection) url.openConnection();
+                    c.setRequestMethod("POST"); c.setDoOutput(true);
+                    c.setRequestProperty("apikey", SUPABASE_KEY);
+                    c.setRequestProperty("Content-Type", "application/json");
+                    String body = "{\"email\":\""+email.replace("\\","\\\\").replace("\"","\\\"")+"\",\"password\":\""+password.replace("\\","\\\\").replace("\"","\\\"")+"\"}";
+                    try(java.io.OutputStream os=c.getOutputStream()){os.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8));}
+                    int status=c.getResponseCode();
+                    if(status>=200 && status<300) js("authSuccess","");
+                    else js("authError","StackUp ID ou senha inválidos.");
+                    c.disconnect();
+                } catch(Exception e){ js("authError","Não foi possível conectar ao STACKUP ID."); }
+            }).start();
+        }
+
+        @JavascriptInterface public void biometricLogin() {
+            runOnUiThread(() -> {
+                BiometricManager manager = BiometricManager.from(MainActivity.this);
+                int available = manager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+                if (available != BiometricManager.BIOMETRIC_SUCCESS) {
+                    js("authError","Biometria não disponível neste aparelho."); return;
+                }
+                Executor executor = ContextCompat.getMainExecutor(MainActivity.this);
+                BiometricPrompt prompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
+                    @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) { super.onAuthenticationSucceeded(result); js("authSuccess",""); }
+                    @Override public void onAuthenticationError(int code, CharSequence msg) { super.onAuthenticationError(code,msg); js("authError",msg.toString()); }
+                });
+                BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("STACKUP HOLD'EM")
+                    .setSubtitle("Confirme sua identidade")
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                    .build();
+                prompt.authenticate(info);
+            });
         }
     }
 
