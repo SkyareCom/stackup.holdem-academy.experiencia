@@ -233,7 +233,10 @@ public class MainActivity extends FragmentActivity {
         Uri u=intent.getData();
         if(!"stackupexperiencia".equals(u.getScheme()) || !"auth".equals(u.getHost())) return;
         String fragment=u.getFragment();
-        if(fragment==null) { js("authError","Retorno do Google sem sessão válida."); return; }
+        if(fragment==null) {
+            intent.setData(null);
+            js("authError","Retorno do Google sem sessão válida."); return;
+        }
         try {
             java.util.Map<String,String> values=new java.util.HashMap<>();
             for(String part:fragment.split("&")){
@@ -245,8 +248,8 @@ public class MainActivity extends FragmentActivity {
                 saveRefreshToken(refresh);
                 intent.setData(null);
                 js("authSuccess","");
-            } else js("authError","Não foi possível concluir a sessão Google.");
-        } catch(Exception e){ js("authError","Não foi possível validar o retorno Google."); }
+            } else { intent.setData(null); js("authError","Não foi possível concluir a sessão Google."); }
+        } catch(Exception e){ intent.setData(null); js("authError","Não foi possível validar o retorno Google."); }
     }
 
     @Override public void onBackPressed() {
