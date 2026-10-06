@@ -748,6 +748,20 @@ b,strong,.title,.academy,.brand,.internal-title,.internal-head-title,
 .card svg [fill]:not([fill="none"]),.ref-card svg [fill]:not([fill="none"]),
 [class*="card"] svg [fill]:not([fill="none"]){fill:var(--academy-accent-green)!important;}
 </style>
+
+<style id="academy-light-green-accents-final">
+/* Verde Academy mais claro e unico para bordas e iconografia. */
+:root{--academy-accent:#48F07A!important;}
+.card,.ref-card,.plan-card,.app-card,[class*="card"]{
+  border-color:var(--academy-accent)!important;
+}
+.card svg,.ref-card svg,.plan-card svg,.app-card svg,
+.card .icon-wrap,.ref-card .icon-wrap,
+.card [class*="icon"],.ref-card [class*="icon"]{
+  color:var(--academy-accent)!important;
+  stroke:var(--academy-accent)!important;
+}
+</style>
 </head>
 <body>
 <main class="app">
