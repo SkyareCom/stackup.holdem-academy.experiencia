@@ -672,6 +672,34 @@ button{appearance:none;border:none;outline:none;background:none;}
   }
 }
 </style>
+
+<style id="academy-global-type-and-card-final">
+/* Regra final solicitada: tipografia global 10px, pesos 400/500; cards principais 60px. */
+html,body,button,input,select,textarea,
+.app,.app *{
+  font-size:10px!important;
+  font-weight:400!important;
+}
+b,strong,.title,.academy,.brand,.internal-title,.internal-head-title,
+.card .title,.ref-card b,[class*="title"],[class*="heading"]{
+  font-weight:500!important;
+}
+.cards>.card,
+.root-section-view>.ref-grid>.ref-card{
+  height:60px!important;
+  min-height:60px!important;
+  max-height:60px!important;
+  box-sizing:border-box!important;
+}
+@media (max-height:800px){
+  .cards>.card,
+  .root-section-view>.ref-grid>.ref-card{
+    height:60px!important;
+    min-height:60px!important;
+    max-height:60px!important;
+  }
+}
+</style>
 </head>
 <body>
 <main class="app">
