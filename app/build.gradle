@@ -16,8 +16,8 @@ android {
         applicationId 'com.skyare.stackupacademy'
         minSdk 24
         targetSdk 36
-        versionCode 233
-        versionName '2.1.17'
+        versionCode 234
+        versionName '2.1.18'
         buildConfigField 'String', 'SUPABASE_PUBLISHABLE_KEY', '\"' + stackupSupabaseKey + '\"'
     }
 
