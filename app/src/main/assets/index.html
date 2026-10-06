@@ -700,6 +700,18 @@ b,strong,.title,.academy,.brand,.internal-title,.internal-head-title,
   }
 }
 </style>
+
+<style id="android-top-safe-area-final">
+/* Android WebView: reserva fisica para status bar nas telas internas. */
+.internal-page{
+  top:0!important;
+  padding-top:max(34px,env(safe-area-inset-top))!important;
+  box-sizing:border-box!important;
+}
+.internal-head{
+  margin-top:0!important;
+}
+</style>
 </head>
 <body>
 <main class="app">
