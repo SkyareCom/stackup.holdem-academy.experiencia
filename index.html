@@ -635,6 +635,24 @@ button{appearance:none;border:none;outline:none;background:none;}
 <style id="academy-launch-plans">
 .plan-price s{opacity:.55;font-weight:400;margin-right:6px}.plan-price strong{font-weight:700}.annual-featured{position:relative;padding-top:34px!important}.best-choice-badge{position:absolute;top:10px;left:12px;font-size:9px;font-weight:700;letter-spacing:.08em}.annual-featured .plan-meta{font-weight:700}
 </style>
+<style id="mobile-safe-area-framing-fix">
+/* Preserve approved visual; only correct Android edge-to-edge framing. */
+.screen{padding-top:max(10px,env(safe-area-inset-top))!important;}
+.internal-page{padding-top:max(14px,env(safe-area-inset-top))!important;}
+.internal-page{inset:0 0 calc(66px + env(safe-area-inset-bottom))!important;}
+.internal-content{padding-bottom:12px!important;scroll-padding-bottom:16px!important;}
+.internal-nav{height:calc(66px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom)!important;}
+@media (max-height:800px){
+  .screen{gap:5px!important;}
+  .logo{width:min(37vw,148px)!important;}
+  .brand{margin-top:0!important;}
+  .academy{font-size:clamp(48px,7svh,64px)!important;}
+  .tagline-wrap{padding-top:6px!important;padding-bottom:6px!important;}
+  .lang-btn{min-height:42px!important;}
+  .cards{gap:7px!important;margin-top:3px!important;}
+  .card{min-height:54px!important;padding-top:8px!important;padding-bottom:8px!important;}
+}
+</style>
 </head>
 <body>
 <main class="app">
