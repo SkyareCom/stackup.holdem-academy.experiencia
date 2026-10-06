@@ -707,7 +707,7 @@ button{appearance:none;border:none;outline:none;background:none;}
       <div class="auth-title">CRIAR CONTA STACKUP</div>
       <div class="auth-copy">Crie seu StackUp ID para usar em todo o ecossistema StackUp Hold'em.</div>
       <input id="signup-email" class="auth-input" type="email" autocomplete="email" placeholder="E-MAIL" required>
-      <input id="signup-password" class="auth-input" type="password" autocomplete="new-password" placeholder="SENHA" minlength="6" required>
+      <input id="signup-password" class="auth-input" type="password" inputmode="numeric" autocomplete="new-password" placeholder="SENHA • 6 DÍGITOS" minlength="6" maxlength="6" pattern="[0-9]{6}" required>
       <button class="auth-btn" type="submit">CRIAR CONTA</button>
       <button class="auth-cancel" data-auth-close="signup-modal" type="button">CANCELAR</button>
     </form>
@@ -717,7 +717,7 @@ button{appearance:none;border:none;outline:none;background:none;}
       <div class="auth-title">STACKUP ID</div>
       <div class="auth-copy">Entre com seu StackUp ID na própria tela de entrada.</div>
       <input id="stackup-id" class="auth-input" type="text" autocomplete="username" placeholder="E-MAIL OU STACKUP ID" required>
-      <input id="stackup-password" class="auth-input" type="password" autocomplete="current-password" placeholder="SENHA" required>
+      <input id="stackup-password" class="auth-input" type="password" inputmode="numeric" autocomplete="current-password" placeholder="SENHA • 6 DÍGITOS" minlength="6" maxlength="6" pattern="[0-9]{6}" required>
       <button class="auth-btn" type="submit">ENTRAR</button>
       <button class="auth-cancel" data-auth-close="stackup-modal" type="button">CANCELAR</button>
     </form>
@@ -751,8 +751,8 @@ button{appearance:none;border:none;outline:none;background:none;}
   document.getElementById('bio-back').addEventListener('click',()=>{bioScreen.style.display='none';});
   document.getElementById('google-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.googleLogin)AndroidAuth.googleLogin();});
   document.getElementById('bio-enter').addEventListener('click',()=>{if(window.AndroidAuth&&AndroidAuth.biometricLogin)AndroidAuth.biometricLogin();});
-  document.getElementById('stackup-form').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('stackup-id').value.trim(),pw=document.getElementById('stackup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupLogin)AndroidAuth.stackupLogin(id,pw);});
-  document.getElementById('signup-form').addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('signup-email').value.trim(),pw=document.getElementById('signup-password').value;if(window.AndroidAuth&&AndroidAuth.stackupSignup)AndroidAuth.stackupSignup(email,pw);else window.authError('Cadastro indisponível neste dispositivo.');});
+  document.getElementById('stackup-form').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('stackup-id').value.trim(),pw=document.getElementById('stackup-password').value;if(!/^\d{6}$/.test(pw)){window.authError('A senha STACKUP deve ter exatamente 6 dígitos.');return;}if(window.AndroidAuth&&AndroidAuth.stackupLogin)AndroidAuth.stackupLogin(id,pw);});
+  document.getElementById('signup-form').addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('signup-email').value.trim(),pw=document.getElementById('signup-password').value;if(!/^\d{6}$/.test(pw)){window.authError('A senha STACKUP deve ter exatamente 6 dígitos.');return;}if(window.AndroidAuth&&AndroidAuth.stackupSignup)AndroidAuth.stackupSignup(email,pw);else window.authError('Cadastro indisponível neste dispositivo.');});
   window.authSuccess=function(){document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('open'));bioScreen.style.display='none';if(window.openAcademyHome)window.openAcademyHome();};
   window.authError=function(message){const toast=document.getElementById('toast');toast.textContent=message||'Não foi possível autenticar.';toast.style.opacity='1';toast.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(-50%) translateY(18px)'},2200);};
 })();
