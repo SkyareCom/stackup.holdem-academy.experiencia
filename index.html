@@ -732,6 +732,22 @@ b,strong,.title,.academy,.brand,.internal-title,.internal-head-title,
   filter:none!important;
 }
 </style>
+
+<style id="academy-bright-green-accents-final">
+/* Verde claro aprovado: bordas de cards e iconografia. */
+:root{--academy-accent-green:#4CF27B!important;}
+.card,.ref-card,.plan-card,.app-card,[class*="card"]{
+  border-color:var(--academy-accent-green)!important;
+}
+.card svg,.ref-card svg,.plan-card svg,.app-card svg,
+.card .icon,.ref-card .icon,.icon-wrap,.icon-line,
+[class*="card"] svg,[class*="card"] [class*="icon"]{
+  color:var(--academy-accent-green)!important;
+  stroke:var(--academy-accent-green)!important;
+}
+.card svg [fill]:not([fill="none"]),.ref-card svg [fill]:not([fill="none"]),
+[class*="card"] svg [fill]:not([fill="none"]){fill:var(--academy-accent-green)!important;}
+</style>
 </head>
 <body>
 <main class="app">
