@@ -708,6 +708,14 @@ b,strong,.title,.academy,.brand,.internal-title,.internal-head-title,
 .screen>.cards>.card svg,.screen>.cards>.card .icon-wrap,.screen>.cards>.card .icon-line{color:var(--academy-accent-green,#4CF27B)!important;stroke:var(--academy-accent-green,#4CF27B)!important}
 </style>
 
+<style id="academy-accent-single-pass-final">
+/* Única execução autorizada: unifica o verde Academy em bordas, ícones e títulos de seção. */
+:root{--academy-accent-green:#48F07A!important;--academy-title-green:#61F58A!important}
+.card,.ref-card,.plan-card,.app-card,.profile-box,.metric-box,.quiz-box,.sim-box,[class*="card"]{border-color:var(--academy-accent-green)!important}
+.card svg,.ref-card svg,.plan-card svg,.app-card svg,.icon-wrap,.icon-line,.ref-icon,.internal-nav button.active,[class*="card"] svg,[class*="card"] [class*="icon"]{color:var(--academy-accent-green)!important;stroke:var(--academy-accent-green)!important}
+.internal-title,.section-label,.profile-section-title,.internal-head-title{color:var(--academy-title-green)!important}
+</style>
+
 <style id="android-top-safe-area-final">
 /* Android WebView: reserva fisica para status bar nas telas internas. */
 .internal-page{
