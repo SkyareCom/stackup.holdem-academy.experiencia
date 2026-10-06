@@ -2,6 +2,8 @@ package com.skyare.stackupacademy;
 
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.security.keystore.KeyGenParameterSpec;
@@ -38,6 +40,7 @@ public class MainActivity extends FragmentActivity {
         s.setAllowContentAccess(false);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         webView.addJavascriptInterface(new AndroidAuth(), "AndroidAuth");
+        webView.addJavascriptInterface(new AndroidNotifications(), "AndroidNotifications");
         webView.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, android.webkit.WebResourceRequest request) {
                 Uri uri=request.getUrl();
@@ -69,6 +72,14 @@ public class MainActivity extends FragmentActivity {
         if (!"authSuccess".equals(function) && !"authError".equals(function)) return;
         String safe = org.json.JSONObject.quote(value == null ? "" : value);
         runOnUiThread(() -> webView.evaluateJavascript("window."+function+"("+safe+")", null));
+    }
+
+    public class AndroidNotifications {
+        @JavascriptInterface public void requestPermission() {
+            if (android.os.Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                runOnUiThread(() -> requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 235));
+            }
+        }
     }
 
     public class AndroidAuth {
