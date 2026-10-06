@@ -22,6 +22,7 @@ import android.window.OnBackInvokedDispatcher;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends FragmentActivity {
@@ -31,6 +32,8 @@ public class MainActivity extends FragmentActivity {
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        // Keep the WebView inside Android system-bar bounds on every device.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         webView = new WebView(this);
         setContentView(webView);
         WebSettings s = webView.getSettings();
