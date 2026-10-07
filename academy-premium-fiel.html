@@ -31,6 +31,17 @@ function layout(){
  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
  const scale=Math.min(w/709,h/1536),dw=709*scale,dh=1536*scale,x=(w-dw)/2,y=(h-dh)/2;
  ctx.drawImage(source,x,y,dw,dh);
+ /* Frozen-brand rule: preserve the approved raster composition and recolor only the ACADEMY word. */
+ const academyBox={left:64,top:675,width:588,height:98};
+ const ax=Math.round(x+academyBox.left*scale),ay=Math.round(y+academyBox.top*scale),aw=Math.round(academyBox.width*scale),ah=Math.round(academyBox.height*scale);
+ if(aw>0&&ah>0){
+  const pixels=ctx.getImageData(ax,ay,aw,ah),d=pixels.data,target=[97,245,138];
+  for(let p=0;p<d.length;p+=4){const r=d[p],g=d[p+1],b=d[p+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b),lum=(r+g+b)/3;
+   /* Only bright, low-saturation glyph pixels; dark/background/image pixels remain untouched. */
+   if(lum>=150&&(mx-mn)<=42){const a=Math.max(0,Math.min(1,(lum-150)/105));d[p]=Math.round(r*(1-a)+target[0]*a);d[p+1]=Math.round(g*(1-a)+target[1]*a);d[p+2]=Math.round(b*(1-a)+target[2]*a);}
+  }
+  ctx.putImageData(pixels,ax,ay);
+ }
  function place(selector,left,top,width,height){const el=document.querySelector(selector);el.style.left=(x+left*scale)+'px';el.style.top=(y+top*scale)+'px';el.style.width=width*scale+'px';el.style.height=height*scale+'px'}
  place('.logo',180,165,349,350);place('.branding',64,590,588,183);place('.slogan',108,788,493,68);
  place('.pt',32,925,205,79);place('.en',253,925,204,79);place('.es',473,925,205,79);
