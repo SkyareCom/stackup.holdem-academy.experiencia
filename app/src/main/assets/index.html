@@ -1185,7 +1185,7 @@ let iconScheduled=false;new MutationObserver(()=>{if(iconScheduled)return;iconSc
 <!-- Frozen approved Academy entry: composition/logo/brand are immutable. Only ACADEMY accent color may change. -->
 <script id="academy-frozen-entry-bridge">
 document.addEventListener("DOMContentLoaded",()=>{if(document.getElementById("academyFrozenEntry"))return;
- const f=document.createElement("iframe");f.id="academyFrozenEntry";f.src="academy-premium-fiel.html";f.title="STACKUP HOLD'EM ACADEMY";
+ const f=document.createElement("iframe");f.id="academyFrozenEntry";f.src="academy-premium-fiel.html?v=20261007-0814";f.title="STACKUP HOLD'EM ACADEMY";
  f.style.cssText="position:fixed;inset:0;width:100vw;height:100dvh;border:0;z-index:2147483000;background:#00170c;display:block";document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden";document.body.appendChild(f);
  window.addEventListener("message",e=>{if(e.origin!==location.origin||!e.data||e.data.type!=="stackup-academy-entry")return;
   const act=e.data.action;
