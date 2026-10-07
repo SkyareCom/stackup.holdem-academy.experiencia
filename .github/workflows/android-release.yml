@@ -2,6 +2,11 @@ name: Build Academy AAB
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - fix-uniform-root-cards-70
+    paths:
+      - 'app/build.gradle'
 
 jobs:
   build:
