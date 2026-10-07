@@ -1186,7 +1186,7 @@ let iconScheduled=false;new MutationObserver(()=>{if(iconScheduled)return;iconSc
 <script id="academy-frozen-entry-bridge">
 document.addEventListener("DOMContentLoaded",()=>{if(document.getElementById("academyFrozenEntry"))return;
  const f=document.createElement("iframe");f.id="academyFrozenEntry";f.src="academy-premium-fiel.html";f.title="STACKUP HOLD'EM ACADEMY";
- f.style.cssText="position:fixed;inset:0;width:100%;height:100%;border:0;z-index:2147483000;background:#00170c";document.body.appendChild(f);
+ f.style.cssText="position:fixed;inset:0;width:100vw;height:100dvh;border:0;z-index:2147483000;background:#00170c;display:block";document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden";document.body.appendChild(f);
  window.addEventListener("message",e=>{if(e.origin!==location.origin||!e.data||e.data.type!=="stackup-academy-entry")return;
   const act=e.data.action;
   if(act==="language"){const map={"pt-BR":"pt","en-US":"en","es-ES":"es"},x=document.querySelector('[data-lang="'+(map[e.data.locale]||"pt")+'"]');if(x)x.click();return;}
