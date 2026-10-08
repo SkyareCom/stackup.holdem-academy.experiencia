@@ -16,8 +16,8 @@ android {
         applicationId 'com.skyare.stackupacademy'
         minSdk 24
         targetSdk 36
-        versionCode 237
-        versionName '2.1.21'
+        versionCode 238
+        versionName '2.1.22'
         buildConfigField 'String', 'SUPABASE_PUBLISHABLE_KEY', '\"' + stackupSupabaseKey + '\"'
     }
 
@@ -53,5 +53,5 @@ dependencies {
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
 }
 
-// Academy v237 viewport and root-card correction
+// Academy v238 viewport and root-card correction
 // Trigger signed release CI after workflow version verification update
