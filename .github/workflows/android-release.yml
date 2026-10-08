@@ -7,6 +7,7 @@ on:
       - fix-uniform-root-cards-70
     paths:
       - 'app/build.gradle'
+      - '.github/workflows/android-release.yml'
 
 jobs:
   build:
@@ -40,13 +41,31 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Decode upload keystore
+      - name: Validate release signing configuration
         shell: bash
         env:
           KEYSTORE_B64: ${{ secrets.ACADEMY_UPLOAD_KEYSTORE_B64 }}
+          ACADEMY_KEYSTORE_PASSWORD: ${{ secrets.ACADEMY_KEYSTORE_PASSWORD }}
+          ACADEMY_KEY_ALIAS: ${{ secrets.ACADEMY_KEY_ALIAS }}
+          ACADEMY_KEY_PASSWORD: ${{ secrets.ACADEMY_KEY_PASSWORD }}
         run: |
-          test -n "$KEYSTORE_B64" || (echo "Missing ACADEMY_UPLOAD_KEYSTORE_B64" && exit 1)
+          missing=0
+          for var in KEYSTORE_B64 ACADEMY_KEYSTORE_PASSWORD ACADEMY_KEY_ALIAS ACADEMY_KEY_PASSWORD; do
+            if [ -z "${!var}" ]; then
+              echo "::error title=Missing Android signing secret::Configure $var in Settings > Secrets and variables > Actions"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then exit 1; fi
           printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/academy-upload.jks"
+          if [ ! -s "$RUNNER_TEMP/academy-upload.jks" ]; then
+            echo "::error::Keystore decoded to an empty file"
+            exit 1
+          fi
+          if ! keytool -list -keystore "$RUNNER_TEMP/academy-upload.jks" -storepass:env ACADEMY_KEYSTORE_PASSWORD -alias "$ACADEMY_KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error title=Keystore validation failed::Check keystore password, alias and upload key; do not create a new signing key"
+            exit 1
+          fi
 
       - name: Build signed release AAB
         env:
@@ -56,8 +75,12 @@ jobs:
           ACADEMY_KEY_PASSWORD: ${{ secrets.ACADEMY_KEY_PASSWORD }}
           STACKUP_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.STACKUP_SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          test -n "$STACKUP_SUPABASE_PUBLISHABLE_KEY" || (echo "Missing STACKUP_SUPABASE_PUBLISHABLE_KEY" && exit 1)
+          if [ -z "$STACKUP_SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error title=Missing app configuration::Set STACKUP_SUPABASE_PUBLISHABLE_KEY in Actions secrets"
+            exit 1
+          fi
           gradle --no-daemon bundleRelease
+          test -s app/build/outputs/bundle/release/app-release.aab
 
       - uses: actions/upload-artifact@v4
         with:
