@@ -55,3 +55,5 @@ dependencies {
 
 // Academy v238 viewport and root-card correction
 // Trigger signed release CI after workflow version verification update
+
+// CI trigger for signed Academy versionCode 238 after workflow update
