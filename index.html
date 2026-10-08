@@ -1195,6 +1195,13 @@ let iconScheduled=false;new MutationObserver(()=>{if(iconScheduled)return;iconSc
 #internal-shell .ref-card b{grid-column:2!important;grid-row:1!important;font-size:10px!important;line-height:16px!important;font-weight:600!important;margin:0!important;padding:0!important}
 #internal-shell .ref-card small{grid-column:2!important;grid-row:2!important;font-size:10px!important;line-height:16px!important;font-weight:400!important;margin:0!important;padding:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 #internal-shell .internal-nav{position:absolute!important;bottom:0!important;left:0!important;right:0!important;height:66px!important;min-height:66px!important;max-height:66px!important;padding:4px 0!important;box-sizing:border-box!important}
+
+/* Android edge-to-edge: reserve status and navigation insets for the real internal UI. */
+#internal-shell{height:100dvh!important;max-height:100dvh!important}
+#internal-shell .internal-page{top:env(safe-area-inset-top,24px)!important;bottom:calc(66px + env(safe-area-inset-bottom,24px))!important;inset:auto 0 calc(66px + env(safe-area-inset-bottom,24px)) 0!important;padding:0 12px!important}
+#internal-shell .internal-head{height:90px!important;min-height:90px!important;max-height:90px!important;padding:0!important}
+#internal-shell .internal-content{height:calc(100% - 90px)!important;max-height:calc(100% - 90px)!important}
+#internal-shell .internal-nav{bottom:env(safe-area-inset-bottom,24px)!important}
 </style>
 <!-- Frozen approved Academy entry: composition/logo/brand are immutable. Only ACADEMY accent color may change. -->
 <script id="academy-frozen-entry-bridge">
