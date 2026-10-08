@@ -54,3 +54,4 @@ dependencies {
 }
 
 // Academy v237 viewport and root-card correction
+// Trigger signed release CI after workflow version verification update
