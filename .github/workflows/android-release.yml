@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           grep -q "applicationId 'com.skyare.stackupacademy'" app/build.gradle
-          grep -q "versionCode 237" app/build.gradle
+          grep -q "versionCode 238" app/build.gradle
           grep -q 'file:///android_asset/index.html' app/src/main/java/com/skyare/stackupacademy/MainActivity.java
           ! grep -R -E 'loadUrl\("https?://' app/src/main/java app/src/main/assets
           grep -q 'android.permission.INTERNET' app/src/main/AndroidManifest.xml
@@ -61,6 +61,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: stackup-academy-v237-aab
+          name: stackup-academy-v238-aab
           path: app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
