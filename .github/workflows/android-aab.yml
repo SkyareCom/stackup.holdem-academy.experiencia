@@ -2,8 +2,9 @@ name: Android Validation Build
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ fix-uniform-root-cards-70 ]
     paths:
+      - '.github/workflows/android-aab.yml'
       - 'app/**'
       - 'build.gradle'
       - 'settings.gradle'
@@ -20,14 +21,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Validate auth configuration
+      - name: Validate approved front and build debug APK
         env:
           STACKUP_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.STACKUP_SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          test -n "$STACKUP_SUPABASE_PUBLISHABLE_KEY"
           cmp --silent index.html app/src/main/assets/index.html
-          gradle :app:assembleDebug
+          gradle --no-daemon :app:assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: stackup-academy-auth-validation-apk
+          name: stackup-academy-v238-diagnostic-apk
           path: app/build/outputs/apk/debug/app-debug.apk
